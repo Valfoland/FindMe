@@ -1,0 +1,16 @@
+{
+  "MainUi": {
+    "SettingsButton" : "SettingsWindow",
+    "CloseButton" : "CloseWindow"
+  },
+  
+  "SettingsWindow": {
+    "CloseButton" : "MainUi",
+    "LanguageButton" : "LanguageWindow"
+  },
+  
+  "LanguageWindow": {
+    "CloseButton" : "MainUi",
+    "BackButton" : "SettingsWindow"
+  }
+}
