@@ -1,0 +1,26 @@
+{
+  "MainUi": {
+    "SettingsButton": {
+      "TransitionTo": "SettingsWindow"
+    },
+    "CloseButton": {
+      "TransitionTo": "CloseWindow"
+    }
+  },
+  "SettingsWindow": {
+    "CloseButton": {
+      "TransitionTo": "MainUi"
+    },
+    "LanguageButton": {
+      "TransitionTo": "LanguageWindow"
+    }
+  },
+  "LanguageWindow": {
+    "CloseButton": {
+      "TransitionTo": "MainUi"
+    },
+    "BackButton": {
+      "TransitionTo": "SettingsWindow"
+    }
+  }
+}
