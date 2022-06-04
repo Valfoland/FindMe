@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
-namespace Game.BusinessLogic
+namespace Game.BusinessLogic.Utils
 {
     public class DataUtil
     {

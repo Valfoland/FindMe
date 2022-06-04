@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using BlFramework;
+using Frameworks.BlFramework.Base;
 using Frameworks.BlFramework.Utils;
 using Game.BusinessLogic.Descriptions;
-using Newtonsoft.Json.Linq;
+using Game.BusinessLogic.Utils;
 
-namespace Game.BusinessLogic
+namespace Game.BusinessLogic.Context
 {
     public class GameContext
     {

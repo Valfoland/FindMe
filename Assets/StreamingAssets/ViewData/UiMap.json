@@ -1,26 +1,36 @@
 {
   "MainUi": {
-    "SettingsButton": {
-      "TransitionTo": "SettingsWindow"
-    },
-    "CloseButton": {
-      "TransitionTo": "CloseWindow"
-    }
+    "Transitions": [
+      {
+        "0": {
+          "TransitionType": "Soft",
+          "DestinationWindow": "SettingsWindow"
+        },
+        "1": {
+          "TransitionType": "Soft",
+          "DestinationWindow": "CloseWindow"
+        }
+      }
+    ]
   },
   "SettingsWindow": {
-    "CloseButton": {
-      "TransitionTo": "MainUi"
-    },
-    "LanguageButton": {
-      "TransitionTo": "LanguageWindow"
-    }
+    "Transitions": [
+      {
+        "0": {
+          "TransitionType": "Hard",
+          "DestinationWindow": "MainUi"
+        }
+      }
+    ]
   },
-  "LanguageWindow": {
-    "CloseButton": {
-      "TransitionTo": "MainUi"
-    },
-    "BackButton": {
-      "TransitionTo": "SettingsWindow"
-    }
+  "CloseWindow": {
+    "Transitions": [
+      {
+        "0": {
+          "TransitionType": "Hard",
+          "DestinationWindow": "MainUi"
+        }
+      }
+    ]
   }
 }

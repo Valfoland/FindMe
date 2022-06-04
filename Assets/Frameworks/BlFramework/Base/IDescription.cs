@@ -1,4 +1,4 @@
-namespace BlFramework
+namespace Frameworks.BlFramework.Base
 {
     public interface IDescription
     {

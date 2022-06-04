@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using BlFramework;
 using Frameworks.BlFramework.Utils;
 
-namespace Frameworks.BlFramework
+namespace Frameworks.BlFramework.Base
 {
     public abstract class DescriptionCollectionBase<TDescription>: IDescription, IEnumerable<KeyValuePair<string, TDescription>> where TDescription : IDescription
     {

@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using BlFramework;
 using Frameworks.BlFramework.Utils;
 
-namespace Frameworks.BlFramework
+namespace Frameworks.BlFramework.Base
 {
     public abstract class DescriptionBase : IDescription
     {
