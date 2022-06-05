@@ -4,7 +4,7 @@ namespace Game.UiController.Windows.WindowsUi
 {
     public class SettingsWindow : WindowBase
     {
-        public SettingsWindow(RectTransform parent, string prefabPath) : base(parent, prefabPath)
+        public SettingsWindow(RectTransform parent, string prefabPath) : base(prefabPath, parent)
         {
         }
 

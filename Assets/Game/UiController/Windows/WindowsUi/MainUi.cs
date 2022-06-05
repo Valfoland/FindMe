@@ -4,7 +4,7 @@ namespace Game.UiController.Windows.WindowsUi
 {
     public class MainUi : WindowBase
     {
-        public MainUi(RectTransform parent, string prefabPath) : base(parent, prefabPath)
+        public MainUi(RectTransform parent, string prefabPath) : base(prefabPath, parent)
         {
         }
 

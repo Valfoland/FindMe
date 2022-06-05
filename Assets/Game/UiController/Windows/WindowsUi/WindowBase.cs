@@ -1,41 +1,34 @@
 using System;
+using Frameworks.OEPFramework.UnityEngine.Behaviour;
+using Frameworks.StateMachine;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Game.UiController.Windows.WindowsUi
 {
-    public abstract class WindowBase
+    public abstract class WindowBase : GUIBehaviour, IStateAction
     {
-        public event Action<string> onSetTransition;
+        public event Action<IStateTransitionDecision> onSetTransition;
         
         public abstract void Show();
         public abstract void Hide();
-
-        protected RectTransform parent;
-        protected RectTransform rectTransform;
-        protected GameObject gameObject;
+        protected abstract void AddTransitionDecisions();
+        protected abstract void RemoveTransitionDecisions();
         
-        private string _prefabPath;
+        protected readonly StateContext context;
 
-        protected WindowBase(RectTransform parent, string prefabPath)
+        protected WindowBase(StateContext context, GameObject go) : base(go)
         {
-            this.parent = parent;
-            _prefabPath = prefabPath;
+            this.context = context;
         }
 
-        protected virtual void Create()
+        protected WindowBase(StateContext context, string prefabPath, RectTransform parent) : base(prefabPath, parent)
         {
-            if (!string.IsNullOrEmpty(_prefabPath))
-            {
-                GetPrefabFromResources();
-            }
+            this.context = context;
         }
 
-        private void GetPrefabFromResources()
+        protected WindowBase(StateContext context, GameObject template, RectTransform parent) : base(template, parent)
         {
-            var resource = Resources.Load<RectTransform>(_prefabPath);
-            rectTransform = Object.Instantiate(resource, parent);
-            gameObject = rectTransform.gameObject;
+            this.context = context;
         }
     }
 }

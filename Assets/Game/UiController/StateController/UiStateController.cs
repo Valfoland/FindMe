@@ -1,6 +1,5 @@
 using Game.BusinessLogic.Descriptions;
 using Game.BusinessLogic.Utils;
-using Game.UiController.Transitions;
 using Game.UiController.Windows;
 
 namespace Game.UiController.StateController

@@ -4,7 +4,7 @@ namespace Game.UiController.Windows.WindowsUi
 {
     public class CloseWindow : WindowBase
     {
-        public CloseWindow(RectTransform parent, string prefabPath) : base(parent, prefabPath)
+        public CloseWindow(RectTransform parent, string prefabPath) : base(prefabPath, parent)
         {
         }
 

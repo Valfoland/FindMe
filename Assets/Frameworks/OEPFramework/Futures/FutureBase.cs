@@ -123,14 +123,9 @@ namespace Frameworks.OEPFramework.Futures
         public abstract IFuture Run();
         public abstract bool Reuse();
 
-        private static T StaticCast<T>(IFuture future)
-        {
-            return (T)future;
-        }
-
         public T Cast<T>() where T : IFuture
         {
-            return StaticCast<T>(this);
+            return (T)(IFuture) this;
         }
 
         protected void SetAsPromise()
