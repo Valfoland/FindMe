@@ -14,7 +14,7 @@ namespace Game.UiController.StateController
         public UiState(UiTransitionDescriptionCollection transitionCollection)
         {
             _transitionCollection = transitionCollection;
-            _windowBase = new WindowBase(); //TODO должен быть WindowFactory
+            //_windowBase = new WindowBase(); TODO должен быть WindowFactory
             
         }
 
