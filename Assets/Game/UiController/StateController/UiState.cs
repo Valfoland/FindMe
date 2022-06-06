@@ -1,28 +1,20 @@
 using System;
 using Frameworks.StateMachine;
-using Game.BusinessLogic.Descriptions;
-using Game.UiController.Windows.WindowsUi;
+using Game.UiController.Transitions;
+using Game.UiController.Windows;
 
 namespace Game.UiController.StateController
 {
     public class UiState : State
     {
-        private readonly UiTransitionDescriptionCollection _transitionCollection;
-
-        public UiState(StateContext context, UiTransitionDescriptionCollection transitionCollection) : base(context)
+        public UiState(Action<IStateTransition> onNeedUpdateState, IStateTransition transition) : base(onNeedUpdateState, transition)
         {
-            _transitionCollection = transitionCollection;
-        }
-        
-        protected override IStateAction GetStateAction()
-        {
-            throw new NotImplementedException();
+            
         }
 
-        protected override IStateTransition GetTransition()
+        protected override IStateAction GetStateAction(IStateTransition transition)
         {
-            var transitionDescription = _transitionCollection.GetChild(transitionKey);
-            //onSetTransition?.Invoke(transitionDescription);
+            return new WindowFactory().GetWindow((UiStateTransition) transition);
         }
     }
 }

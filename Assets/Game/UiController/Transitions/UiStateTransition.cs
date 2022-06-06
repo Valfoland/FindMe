@@ -1,18 +1,26 @@
-using Game.UiController.StateController;
+using System;
+using Frameworks.StateMachine;
+using Game.UiController.Windows;
 
 namespace Game.UiController.Transitions
 {
-    public abstract class UiStateTransition
+    public abstract class UiStateTransition : IStateTransition
     {
-        protected UiState previousState;
-        protected UiState currentState;
-        
-        protected abstract void SetTransition();
+        public WindowType WindowType { get; private set; }
 
-        protected UiStateTransition(UiState previousState, UiState currentState)
+        protected UiStateTransition(WindowType windowType)
         {
-            this.previousState = previousState;
-            this.currentState = currentState;
+            WindowType = windowType;
+        }
+
+        public virtual void TransitionTo(State previousState, State nextState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual T GetTransitionData<T>()
+        {
+            throw new NotImplementedException();
         }
     }
 }

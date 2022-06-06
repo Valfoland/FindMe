@@ -6,29 +6,15 @@ namespace Frameworks.StateMachine
     {
         protected State CurrentState { get; private set; }
 
-        protected abstract void AddTransitions();
-        protected abstract void RemoveTransitions();
-        protected abstract State GetNextState();
-        
-        protected virtual void SwitchState(IStateTransition transition)
+        protected abstract State GetState(Action<IStateTransition> onSetTransition, IStateTransition transition);
+
+        public void SwitchState(IStateTransition transition)
         {
             var previousState = CurrentState;
-            DetachTransitionEvent();
 
-            CurrentState = GetNextState();
-            AttachTransitionEvent();
-            
+            CurrentState = GetState(SwitchState, transition);
+
             transition.TransitionTo(previousState, CurrentState);
-        }
-
-        private void AttachTransitionEvent()
-        {
-            CurrentState.onNeedUpdateState += SwitchState;
-        }
-
-        private void DetachTransitionEvent()
-        {
-            CurrentState.onNeedUpdateState -= SwitchState;
         }
     }
 }

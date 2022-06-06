@@ -5,39 +5,34 @@ namespace Frameworks.StateMachine
 {
     public abstract class State
     {
-        public event Action<IStateTransition> onNeedUpdateState;
-
         protected IStateAction StateAction { get; private set; }
-        protected readonly StateContext context;
-        
-        protected abstract IStateAction GetStateAction();
-        protected abstract IStateTransition GetTransition();
-        
-        protected State(StateContext context)
+        protected IStateTransition Transition { get; private set; }
+
+        private readonly Action<IStateTransition> _onNeedUpdateState;
+
+        protected abstract IStateAction GetStateAction(IStateTransition transition);
+
+        protected State(Action<IStateTransition> onNeedUpdateState, IStateTransition transition)
         {
-            this.context = context;
+            _onNeedUpdateState = onNeedUpdateState;
+            Transition = transition;
         }
 
         public virtual void OnEnter()
         {
-            StateAction = GetStateAction();
-            StateAction.onSetTransition += OnSetTransition;
-            StateAction.Show();
+            StateAction = GetStateAction(Transition);
+            StateAction.Show(OnSetTransition);
         }
 
         public virtual void OnExit()
         {
-            StateAction.onSetTransition -= OnSetTransition;
             StateAction.Hide();
             StateAction = null;
         }
 
-        protected virtual void OnSetTransition(IStateTransitionDecision stateTransitionDecision)
+        private void OnSetTransition(IStateTransition stateTransition)
         {
-            if (stateTransitionDecision.Check())
-            {
-                onNeedUpdateState?.Invoke(GetTransition());
-            }
+            _onNeedUpdateState?.Invoke(stateTransition);
         }
     }
 }

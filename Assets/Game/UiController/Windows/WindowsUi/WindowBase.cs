@@ -7,28 +7,35 @@ namespace Game.UiController.Windows.WindowsUi
 {
     public abstract class WindowBase : GUIBehaviour, IStateAction
     {
-        public event Action<IStateTransitionDecision> onSetTransition;
-        
-        public abstract void Show();
-        public abstract void Hide();
         protected abstract void AddTransitionDecisions();
         protected abstract void RemoveTransitionDecisions();
         
-        protected readonly StateContext context;
+        protected readonly IStateTransition transition;
 
-        protected WindowBase(StateContext context, GameObject go) : base(go)
+        protected WindowBase(IStateTransition transition, GameObject go) : base(go)
         {
-            this.context = context;
+            this.transition = transition;
         }
 
-        protected WindowBase(StateContext context, string prefabPath, RectTransform parent) : base(prefabPath, parent)
+        protected WindowBase(IStateTransition transition, string prefabPath, RectTransform parent) : base(prefabPath, parent)
         {
-            this.context = context;
+            this.transition = transition;
         }
 
-        protected WindowBase(StateContext context, GameObject template, RectTransform parent) : base(template, parent)
+        protected WindowBase(IStateTransition transition, GameObject template, RectTransform parent) : base(template, parent)
         {
-            this.context = context;
+            this.transition = transition;
+        }
+
+        public virtual void Show(Action<IStateTransition> onSetTransition)
+        {
+            AddTransitionDecisions();
+        }
+        
+
+        public virtual void Hide()
+        {
+            RemoveTransitionDecisions();
         }
     }
 }

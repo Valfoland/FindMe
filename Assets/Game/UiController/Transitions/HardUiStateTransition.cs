@@ -1,18 +1,18 @@
-using Game.UiController.StateController;
+using Frameworks.StateMachine;
+using Game.UiController.Windows;
 
 namespace Game.UiController.Transitions
 {
     public class HardUiStateTransition : UiStateTransition
     {
-        public HardUiStateTransition(UiState previousState, UiState currentState) : base(previousState, currentState)
+        public HardUiStateTransition(WindowType windowType) : base(windowType)
         {
-            
         }
 
-        protected override void SetTransition()
+        public override void TransitionTo(State previousState, State nextState)
         {
-            previousState.Hide();
-            currentState.Show();
+            previousState.OnExit();
+            nextState.OnEnter();
         }
     }
 }
