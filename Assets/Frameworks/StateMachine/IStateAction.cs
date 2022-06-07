@@ -4,7 +4,7 @@ namespace Frameworks.StateMachine
 {
     public interface IStateAction
     {
-        void Show(Action<IStateTransition> onSetTransition);
+        void Show(Action<IStateTransitionData> onSetTransition);
         void Hide();
     }
 }

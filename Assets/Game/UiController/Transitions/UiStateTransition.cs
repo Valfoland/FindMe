@@ -1,26 +1,19 @@
-using System;
 using Frameworks.StateMachine;
-using Game.UiController.Windows;
+using Game.BusinessLogic.Descriptions;
 
 namespace Game.UiController.Transitions
 {
     public abstract class UiStateTransition : IStateTransition
     {
-        public WindowType WindowType { get; private set; }
+        public UiTransitionDescription Description { get; private set; }
+        
+        public abstract void TransitionTo(State previousState, State nextState, IStateTransitionData data);
 
-        protected UiStateTransition(WindowType windowType)
+        protected UiStateTransition(UiTransitionDescription description)
         {
-            WindowType = windowType;
+            Description = description;
         }
 
-        public virtual void TransitionTo(State previousState, State nextState)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual T GetTransitionData<T>()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

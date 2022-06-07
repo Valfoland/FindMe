@@ -1,26 +1,31 @@
 
 using System;
+using System.Collections.Generic;
 
 namespace Frameworks.StateMachine
 {
     public abstract class State
     {
+
         protected IStateAction StateAction { get; private set; }
-        protected IStateTransition Transition { get; private set; }
+        protected IEnumerable<KeyValuePair<string, IStateTransitionData>> TransitionsData { get; }
+        protected IStateTransitionData MainTransitionData { get; private set; }
 
-        private readonly Action<IStateTransition> _onNeedUpdateState;
+        protected abstract IStateAction GetStateAction(IStateTransitionData mainTransitionData, IEnumerable<KeyValuePair<string, IStateTransitionData>> transitionsData);
 
-        protected abstract IStateAction GetStateAction(IStateTransition transition);
+        private readonly Action<IStateTransitionData> _onNeedUpdateState;
 
-        protected State(Action<IStateTransition> onNeedUpdateState, IStateTransition transition)
+        protected State(Action<IStateTransitionData> onNeedUpdateState, IStateTransitionData mainTransitionData,
+            IEnumerable<KeyValuePair<string, IStateTransitionData>> transitionsData)
         {
             _onNeedUpdateState = onNeedUpdateState;
-            Transition = transition;
+            TransitionsData = transitionsData;
+            MainTransitionData = mainTransitionData;
         }
 
         public virtual void OnEnter()
         {
-            StateAction = GetStateAction(Transition);
+            StateAction = GetStateAction(MainTransitionData, TransitionsData);
             StateAction.Show(OnSetTransition);
         }
 
@@ -30,9 +35,9 @@ namespace Frameworks.StateMachine
             StateAction = null;
         }
 
-        private void OnSetTransition(IStateTransition stateTransition)
+        private void OnSetTransition(IStateTransitionData stateTransitionData)
         {
-            _onNeedUpdateState?.Invoke(stateTransition);
+            _onNeedUpdateState?.Invoke(stateTransitionData);
         }
     }
 }

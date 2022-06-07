@@ -1,19 +1,19 @@
 using System;
-using Game.UiController.Transitions;
+using Game.BusinessLogic.Descriptions;
 using Game.UiController.Windows.WindowsUi;
 
 namespace Game.UiController.Windows
 {
     public class WindowFactory
     {
-        public WindowBase GetWindow(UiStateTransition transition)
+        public WindowBase GetWindow(UiTransitionDescription mainTransitionData, UiTransitionDescriptionCollection transitionsData)
         {
-            return transition.WindowType switch
+            return mainTransitionData.DestinationWindow switch
             {
-                WindowType.MainUi => new MainUi(transition, null, ""),
-                WindowType.SettingsWindow => new SettingsWindow(transition, null,""),
-                WindowType.CloseWindow => new CloseWindow(transition, null,""),
-                _ => throw new Exception("Не найдено окна с именем: " + nameof(transition.WindowType))
+                WindowType.MainUi => new MainUi(mainTransitionData, transitionsData, null, ""),
+                WindowType.SettingsWindow => new SettingsWindow(mainTransitionData, transitionsData, null,""),
+                WindowType.CloseWindow => new CloseWindow(mainTransitionData, transitionsData,null,""),
+                _ => throw new Exception("Не найдено окна с именем: " + nameof(mainTransitionData.DestinationWindow))
             };
         }
     }

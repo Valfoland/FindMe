@@ -1,16 +1,16 @@
-
 using Frameworks.StateMachine;
-using Game.UiController.Windows;
+using Game.BusinessLogic.Descriptions;
+
 
 namespace Game.UiController.Transitions
 {
     public class SoftUiStateTransition : UiStateTransition
     {
-        public SoftUiStateTransition(WindowType windowType) : base(windowType)
+        public SoftUiStateTransition(UiTransitionDescription description) : base(description)
         {
         }
-        
-        public override void TransitionTo(State previousState, State nextState)
+
+        public override void TransitionTo(State previousState, State nextState, IStateTransitionData data)
         {
             nextState.OnEnter();
         }

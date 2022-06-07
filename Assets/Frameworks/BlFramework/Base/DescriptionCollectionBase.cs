@@ -7,8 +7,7 @@ namespace Frameworks.BlFramework.Base
     public abstract class DescriptionCollectionBase<TDescription>: IDescription, IEnumerable<KeyValuePair<string, TDescription>> where TDescription : IDescription
     {
         public string Key { get; }
-
-        private readonly TreeData _nodeData;
+        protected TreeData NodeData { get; }
         
         private readonly Dictionary<string, IDescription> _items = new Dictionary<string, IDescription>();
 
@@ -17,12 +16,12 @@ namespace Frameworks.BlFramework.Base
         protected DescriptionCollectionBase(TreeData nodeData)
         {
             Key = nodeData.GetKey();
-            _nodeData = nodeData;
+            NodeData = nodeData;
         }
 
         public IEnumerator<KeyValuePair<string, TDescription>> GetEnumerator()
         {
-            foreach (var item in _nodeData.GetCollection())
+            foreach (var item in NodeData.GetCollection())
             {
                 yield return new KeyValuePair<string, TDescription>(item.Key, GetChild(item.Key));
             }
@@ -45,7 +44,7 @@ namespace Frameworks.BlFramework.Base
                 return (TDescription) item;
             }
             
-            AddChild(GetNewDescription(_nodeData.GetChildData(key)));
+            AddChild(GetNewDescription(NodeData.GetChildData(key)));
             
             return (TDescription) _items[key];
         }

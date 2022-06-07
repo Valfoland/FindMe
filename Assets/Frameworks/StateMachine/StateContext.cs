@@ -5,19 +5,19 @@ namespace Frameworks.StateMachine
 {
     public class StateContext
     {
-        private Dictionary<Type, IStateTransition> _transitions = new Dictionary<Type, IStateTransition>();
+        private Dictionary<Type, IStateTransitionData> _transitions = new Dictionary<Type, IStateTransitionData>();
 
-        public void AddTransition(IStateTransition transition)
+        public void AddTransition(IStateTransitionData transitionData)
         {
-            if (!_transitions.ContainsKey(transition.GetType()))
+            if (!_transitions.ContainsKey(transitionData.GetType()))
             {
-                _transitions.Add(transition.GetType(), transition);
+                _transitions.Add(transitionData.GetType(), transitionData);
             }
         }
 
-        public IStateTransition GetTransition(IStateTransition transition)
+        public IStateTransitionData GetTransition(IStateTransitionData transitionData)
         {
-            return _transitions[transition.GetType()];
+            return _transitions[transitionData.GetType()];
         }
     }
 }

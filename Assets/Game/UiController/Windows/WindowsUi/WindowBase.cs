@@ -1,41 +1,40 @@
 using System;
 using Frameworks.OEPFramework.UnityEngine.Behaviour;
 using Frameworks.StateMachine;
+using Game.BusinessLogic.Descriptions;
 using UnityEngine;
 
 namespace Game.UiController.Windows.WindowsUi
 {
     public abstract class WindowBase : GUIBehaviour, IStateAction
     {
-        protected abstract void AddTransitionDecisions();
-        protected abstract void RemoveTransitionDecisions();
-        
-        protected readonly IStateTransition transition;
+        protected readonly IStateTransitionData transitionData;
 
-        protected WindowBase(IStateTransition transition, GameObject go) : base(go)
+        protected WindowBase(IStateTransitionData transitionData, GameObject go) : base(go)
         {
-            this.transition = transition;
+            this.transitionData = transitionData;
         }
 
-        protected WindowBase(IStateTransition transition, string prefabPath, RectTransform parent) : base(prefabPath, parent)
+        protected WindowBase(IStateTransitionData transitionData, UiTransitionDescriptionCollection uiTransitionDescriptionCollection, string prefabPath,
+            RectTransform parent) : base(prefabPath, parent)
         {
-            this.transition = transition;
+            this.transitionData = transitionData;
         }
 
-        protected WindowBase(IStateTransition transition, GameObject template, RectTransform parent) : base(template, parent)
+        protected WindowBase(IStateTransitionData transitionData, GameObject template, RectTransform parent) : base(template, parent)
         {
-            this.transition = transition;
+            this.transitionData = transitionData;
         }
 
-        public virtual void Show(Action<IStateTransition> onSetTransition)
+        public virtual void Show(Action<IStateTransitionData> onSetTransition)
         {
-            AddTransitionDecisions();
+
         }
         
 
         public virtual void Hide()
         {
-            RemoveTransitionDecisions();
+
         }
     }
 }

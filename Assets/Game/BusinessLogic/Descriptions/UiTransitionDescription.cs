@@ -7,7 +7,7 @@ using Game.UiController.Windows;
 
 namespace Game.BusinessLogic.Descriptions
 {
-    public class UiTransitionDescription : DescriptionBase
+    public class UiTransitionDescription : DescriptionBase, IStateTransitionData
     {
         private const string TransitionTypeKey = "TransitionType";
         private const string DestinationWindowKey = "DestinationWindow";
@@ -26,6 +26,11 @@ namespace Game.BusinessLogic.Descriptions
             {
                 DestinationWindow = destinationWindow;
             }
+        }
+
+        public string GetStateKey()
+        {
+            return DestinationWindow.ToString();
         }
     }
 }

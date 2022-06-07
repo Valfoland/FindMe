@@ -1,20 +1,22 @@
 using System;
+using System.Collections.Generic;
 using Frameworks.StateMachine;
-using Game.UiController.Transitions;
+using Game.BusinessLogic.Descriptions;
 using Game.UiController.Windows;
 
 namespace Game.UiController.StateController
 {
     public class UiState : State
     {
-        public UiState(Action<IStateTransition> onNeedUpdateState, IStateTransition transition) : base(onNeedUpdateState, transition)
+        public UiState(Action<IStateTransitionData> onNeedUpdateState, IStateTransitionData mainTransitionData,
+            IEnumerable<KeyValuePair<string, IStateTransitionData>> transitionsData) : base(onNeedUpdateState, mainTransitionData, transitionsData)
         {
-            
+
         }
 
-        protected override IStateAction GetStateAction(IStateTransition transition)
+        protected override IStateAction GetStateAction(IStateTransitionData mainTransitionData, IEnumerable<KeyValuePair<string, IStateTransitionData>> transitionsData)
         {
-            return new WindowFactory().GetWindow((UiStateTransition) transition);
+            return new WindowFactory().GetWindow((UiTransitionDescription) mainTransitionData, (UiTransitionDescriptionCollection) transitionsData);
         }
     }
 }
