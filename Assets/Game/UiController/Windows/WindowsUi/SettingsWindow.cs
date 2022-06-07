@@ -7,8 +7,8 @@ namespace Game.UiController.Windows.WindowsUi
 {
     public class SettingsWindow : WindowBase
     {
-        public SettingsWindow(IStateTransitionData transitionData, UiTransitionDescriptionCollection uiTransitionDescriptionCollection, RectTransform parent,
-            string prefabPath) : base(transitionData, uiTransitionDescriptionCollection, prefabPath, parent)
+        public SettingsWindow(UiTransitionDescriptionCollection uiTransitionDescriptionCollection, RectTransform parent,
+            string prefabPath) : base(uiTransitionDescriptionCollection, prefabPath, parent)
         {
         }
 

@@ -8,15 +8,20 @@ namespace Game.UiController.StateController
 {
     public class UiState : State
     {
-        public UiState(Action<IStateTransitionData> onNeedUpdateState, IStateTransitionData mainTransitionData,
-            IEnumerable<KeyValuePair<string, IStateTransitionData>> transitionsData) : base(onNeedUpdateState, mainTransitionData, transitionsData)
+        public UiState(Frameworks.StateMachine.StateController stateController, string stateId,
+            IEnumerable<KeyValuePair<string, IStateTransitionData>> transitionsData) : base(stateController, stateId, transitionsData)
         {
 
         }
 
-        protected override IStateAction GetStateAction(IStateTransitionData mainTransitionData, IEnumerable<KeyValuePair<string, IStateTransitionData>> transitionsData)
+        protected override IStateAction GetStateAction(string stateId, IEnumerable<KeyValuePair<string, IStateTransitionData>> transitionsData)
         {
-            return new WindowFactory().GetWindow((UiTransitionDescription) mainTransitionData, (UiTransitionDescriptionCollection) transitionsData);
+            if (Enum.TryParse(stateId, out WindowType windowType))
+            {
+                return new WindowFactory().GetWindow(windowType, (UiTransitionDescriptionCollection) transitionsData);
+            }
+
+            throw new Exception("Не возможно распарсить Id окна");
         }
     }
 }

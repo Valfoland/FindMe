@@ -7,8 +7,8 @@ namespace Game.UiController.Windows.WindowsUi
 {
     public class CloseWindow : WindowBase
     {
-        public CloseWindow(IStateTransitionData transitionData, UiTransitionDescriptionCollection uiTransitionDescriptionCollection, RectTransform parent,
-            string prefabPath) : base(transitionData, uiTransitionDescriptionCollection, prefabPath, parent)
+        public CloseWindow(UiTransitionDescriptionCollection uiTransitionDescriptionCollection, RectTransform parent,
+            string prefabPath) : base(uiTransitionDescriptionCollection, prefabPath, parent)
         {
         }
 

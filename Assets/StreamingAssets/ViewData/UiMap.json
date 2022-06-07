@@ -1,36 +1,20 @@
 {
   "MainUi": {
-    "Transitions": [
-      {
-        "0": {
-          "TransitionType": "Soft",
-          "DestinationWindow": "SettingsWindow"
-        },
-        "1": {
-          "TransitionType": "Soft",
-          "DestinationWindow": "CloseWindow"
-        }
-      }
-    ]
+    "SettingsWindow": {
+      "TransitionType": "Soft"
+    },
+    "CloseWindow": {
+      "TransitionType": "Soft"
+    }
   },
   "SettingsWindow": {
-    "Transitions": [
-      {
-        "0": {
-          "TransitionType": "Hard",
-          "DestinationWindow": "MainUi"
-        }
-      }
-    ]
+    "MainUi": {
+      "TransitionType": "Hard"
+    }
   },
   "CloseWindow": {
-    "Transitions": [
-      {
-        "0": {
-          "TransitionType": "Hard",
-          "DestinationWindow": "MainUi"
-        }
-      }
-    ]
+    "MainUi": {
+      "TransitionType": "Hard"
+    }
   }
 }

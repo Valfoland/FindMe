@@ -10,7 +10,7 @@ namespace Game.UiController.Transitions
         {
         }
 
-        public override void TransitionTo(State previousState, State nextState, IStateTransitionData data)
+        public override void TransitionTo(State previousState, State nextState)
         {
             nextState.OnEnter();
         }

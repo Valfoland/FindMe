@@ -7,8 +7,8 @@ namespace Game.UiController.Windows.WindowsUi
 {
     public class MainUi : WindowBase
     {
-        public MainUi(IStateTransitionData transitionData, UiTransitionDescriptionCollection uiTransitionDescriptionCollection, RectTransform parent, string prefabPath) :
-            base(transitionData, uiTransitionDescriptionCollection, prefabPath, parent)
+        public MainUi(UiTransitionDescriptionCollection uiTransitionDescriptionCollection, RectTransform parent, string prefabPath) :
+            base(uiTransitionDescriptionCollection, prefabPath, parent)
         {
         }
 

@@ -8,22 +8,22 @@ namespace Game.UiController.Windows.WindowsUi
 {
     public abstract class WindowBase : GUIBehaviour, IStateAction
     {
-        protected readonly IStateTransitionData transitionData;
+        protected readonly UiTransitionDescriptionCollection uiTransitionDescriptionCollection;
 
-        protected WindowBase(IStateTransitionData transitionData, GameObject go) : base(go)
+        protected WindowBase(UiTransitionDescriptionCollection uiTransitionDescriptionCollection, GameObject go) : base(go)
         {
-            this.transitionData = transitionData;
+            this.uiTransitionDescriptionCollection = uiTransitionDescriptionCollection;
         }
 
-        protected WindowBase(IStateTransitionData transitionData, UiTransitionDescriptionCollection uiTransitionDescriptionCollection, string prefabPath,
+        protected WindowBase(UiTransitionDescriptionCollection uiTransitionDescriptionCollection, string prefabPath,
             RectTransform parent) : base(prefabPath, parent)
         {
-            this.transitionData = transitionData;
+            this.uiTransitionDescriptionCollection = uiTransitionDescriptionCollection;
         }
 
-        protected WindowBase(IStateTransitionData transitionData, GameObject template, RectTransform parent) : base(template, parent)
+        protected WindowBase(UiTransitionDescriptionCollection uiTransitionDescriptionCollection, GameObject template, RectTransform parent) : base(template, parent)
         {
-            this.transitionData = transitionData;
+            this.uiTransitionDescriptionCollection = uiTransitionDescriptionCollection;
         }
 
         public virtual void Show(Action<IStateTransitionData> onSetTransition)

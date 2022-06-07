@@ -7,7 +7,7 @@ namespace Game.UiController.Transitions
     {
         public UiTransitionDescription Description { get; private set; }
         
-        public abstract void TransitionTo(State previousState, State nextState, IStateTransitionData data);
+        public abstract void TransitionTo(State previousState, State nextState);
 
         protected UiStateTransition(UiTransitionDescription description)
         {

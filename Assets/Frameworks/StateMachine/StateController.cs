@@ -1,21 +1,28 @@
 using System;
+using System.Collections.Generic;
 
 namespace Frameworks.StateMachine
 {
     public abstract class StateController
     {
+        
+        protected IEnumerable<KeyValuePair<string, IStateTransitionData>> TransitionMap { get; private set; }
         protected State CurrentState { get; private set; }
 
-        protected abstract State GetState(Action<IStateTransitionData> onSetTransition, IStateTransitionData transitionData);
-        protected abstract IStateTransition GetTransition();
+        protected abstract State GetState(string stateId);
+        protected abstract IStateTransition GetTransition(string stateId);
+
+        protected StateController(IEnumerable<KeyValuePair<string, IStateTransitionData>> transitionMap)
+        {
+            TransitionMap = transitionMap;
+        }
         
-        public void SwitchState(IStateTransitionData transitionData)
+        public void SwitchState(string stateId)
         {
             var previousState = CurrentState;
-
-            CurrentState = GetState(SwitchState, transitionData);
+            CurrentState = GetState(stateId);
             
-            GetTransition().TransitionTo(previousState, CurrentState, transitionData);
+            GetTransition(stateId).TransitionTo(previousState, CurrentState);
         }
     }
 }
