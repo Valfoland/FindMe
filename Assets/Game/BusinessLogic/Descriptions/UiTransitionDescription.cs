@@ -10,8 +10,7 @@ namespace Game.BusinessLogic.Descriptions
     public class UiTransitionDescription : DescriptionBase, IStateTransitionData
     {
         private const string TransitionTypeKey = "TransitionType";
-        private const string DestinationWindowKey = "DestinationWindow";
-        
+
         public TransitionType TransitionType { get; }
         public WindowType DestinationWindow { get; }
         
@@ -22,13 +21,13 @@ namespace Game.BusinessLogic.Descriptions
                 TransitionType = transitionType;
             }
             
-            if (Enum.TryParse(nodeData.GetString(DestinationWindowKey), out WindowType destinationWindow))
+            if (Enum.TryParse(nodeData.GetKey(), out WindowType destinationWindow))
             {
                 DestinationWindow = destinationWindow;
             }
         }
 
-        public string GetStateKey()
+        public string GetToStateKey()
         {
             return DestinationWindow.ToString();
         }

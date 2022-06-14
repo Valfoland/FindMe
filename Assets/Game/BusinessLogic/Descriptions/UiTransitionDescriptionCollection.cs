@@ -12,7 +12,7 @@ namespace Game.BusinessLogic.Descriptions
             
         }
 
-        public string GetStateKey()
+        public string GetToStateKey()
         {
             return Key;
         }

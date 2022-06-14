@@ -1,3 +1,5 @@
+using System;
+
 namespace Game.UiController.Windows
 {
     public enum WindowType

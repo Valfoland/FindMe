@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using Frameworks.StateMachine;
 using Game.BusinessLogic.Descriptions;
-using Game.BusinessLogic.Utils;
 using Game.UiController.Windows;
 
 namespace Game.UiController.StateController
@@ -11,7 +8,7 @@ namespace Game.UiController.StateController
     {
         private readonly UiMapDescriptionCollection _uiMap;
         
-        public UiStateController(IEnumerable<KeyValuePair<string, IStateTransitionData>> transitionMap) : base(transitionMap)
+        public UiStateController(IStateTransitionData transitionMap) : base(transitionMap)
         {
             _uiMap = (UiMapDescriptionCollection) transitionMap;
         }
@@ -22,11 +19,19 @@ namespace Game.UiController.StateController
             return new UiState(this, stateId, transitionCollection);
         }
 
-        protected override IStateTransition GetTransition(string stateId)
+        protected override bool TryGetTransition(string fromStateId, string toStateId, out IStateTransition stateTransition)
         {
-            var uiTransitionDescription = (UiTransitionDescription) transitionData;
-            
-            return new WindowFactory().GetWindowTransition(uiTransitionDescription.TransitionType, uiTransitionDescription);
+            var transitionCollection = _uiMap.GetChild(fromStateId);
+            var transitionDescription = transitionCollection.GetChild(toStateId);
+
+            if (transitionDescription != null)
+            {
+                stateTransition = WindowFactory.GetWindowTransition(transitionDescription.TransitionType, transitionDescription);
+                return true;
+            }
+
+            stateTransition = null;
+            return false;
         }
     }
 }

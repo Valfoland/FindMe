@@ -5,13 +5,18 @@ using Frameworks.StateMachine;
 
 namespace Game.BusinessLogic.Descriptions
 {
-    public class UiMapDescriptionCollection : DescriptionCollectionBase<UiTransitionDescriptionCollection>, IEnumerable<KeyValuePair<string, IStateTransitionData>>
+    public class UiMapDescriptionCollection : DescriptionCollectionBase<UiTransitionDescriptionCollection>, IEnumerable<KeyValuePair<string, IStateTransitionData>>, IStateTransitionData
     {
         public UiMapDescriptionCollection(TreeData nodeData) : base(nodeData)
         {
             
         }
 
+        public string GetToStateKey()
+        {
+            throw new System.NotImplementedException();
+        }
+        
         protected override IDescription GetNewDescription(TreeData childData)
         {
             return new UiTransitionDescriptionCollection(childData);

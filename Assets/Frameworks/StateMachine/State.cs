@@ -1,20 +1,17 @@
 
-using System;
-using System.Collections.Generic;
-
 namespace Frameworks.StateMachine
 {
     public abstract class State
     {
-        protected string StateId { get; private set; }
-        protected IStateAction StateAction { get; private set; }
-        protected IEnumerable<KeyValuePair<string, IStateTransitionData>> TransitionsData { get; }
+        public string StateId { get; private set; }
+        protected IStateAction CurrentStateAction { get; private set; }
+        protected IStateTransitionData TransitionsData { get; }
 
-        protected abstract IStateAction GetStateAction(string stateId, IEnumerable<KeyValuePair<string, IStateTransitionData>> transitionsData);
+        protected abstract IStateAction GetStateAction(string stateId, IStateTransitionData transitionsData);
 
         protected readonly StateController stateController;
 
-        protected State(StateController stateController, string stateId, IEnumerable<KeyValuePair<string, IStateTransitionData>> transitionsData)
+        protected State(StateController stateController, string stateId, IStateTransitionData transitionsData)
         {
             this.stateController = stateController;
             
@@ -24,19 +21,24 @@ namespace Frameworks.StateMachine
 
         public virtual void OnEnter()
         {
-            StateAction = GetStateAction(StateId, TransitionsData);
-            StateAction.Show(OnSetTransition);
+            if (CurrentStateAction != null) return;
+            
+            CurrentStateAction = GetStateAction(StateId, TransitionsData);
+            CurrentStateAction.SetTransitionAction(OnSetTransition);
+            CurrentStateAction.Show();
         }
 
         public virtual void OnExit()
         {
-            StateAction.Hide();
-            StateAction = null;
+            CurrentStateAction.Hide();
+            CurrentStateAction = null;
+
+            stateController.RemoveState(StateId);
         }
 
-        private void OnSetTransition(IStateTransitionData stateTransitionData)
+        private void OnSetTransition(string toStateTransition)
         {
-            stateController.SwitchState(stateTransitionData);
+            stateController.SwitchState(toStateTransition);
         }
     }
 }
