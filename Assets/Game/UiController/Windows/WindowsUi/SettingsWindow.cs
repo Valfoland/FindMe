@@ -1,4 +1,5 @@
 using Game.BusinessLogic.Descriptions;
+using Game.Data.BusinessLogic.Descriptions.UiMapDescription;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,9 +16,9 @@ namespace Game.UiController.Windows.WindowsUi
         {
         }
 
-        public override void Show()
+        public override void Enter()
         {
-            base.Show();
+            base.Enter();
             CreateUiMap();
             
             _closeButton = GetElementComponent<Button>(CloseButton);
@@ -25,11 +26,11 @@ namespace Game.UiController.Windows.WindowsUi
             gameObject.SetActive(true);
         }
 
-        public override void Hide()
+        public override void Exit()
         {
             _closeButton.onClick.RemoveListener(OnCloseButtonClicked);
             gameObject.SetActive(false);
-            base.Hide();
+            base.Exit();
         }
         
         private void OnCloseButtonClicked()

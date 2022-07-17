@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Frameworks.BlFramework.Base;
 using Frameworks.BlFramework.Utils;
 using Frameworks.StateMachine;
+using Game.Data.BusinessLogic.Descriptions.UiMapDescription;
 
 namespace Game.BusinessLogic.Descriptions
 {
@@ -12,11 +13,6 @@ namespace Game.BusinessLogic.Descriptions
             
         }
 
-        public string GetToStateKey()
-        {
-            throw new System.NotImplementedException();
-        }
-        
         protected override IDescription GetNewDescription(TreeData childData)
         {
             return new UiTransitionDescriptionCollection(childData);

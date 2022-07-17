@@ -7,9 +7,10 @@ namespace Frameworks.BlFramework.Base
     public abstract class DescriptionCollectionBase<TDescription>: IDescription, IEnumerable<KeyValuePair<string, TDescription>> where TDescription : IDescription
     {
         public string Key { get; }
+        public int CountChild => _items.Count;
         protected TreeData NodeData { get; }
         
-        private readonly Dictionary<string, IDescription> _items = new Dictionary<string, IDescription>();
+        private readonly Dictionary<string, IDescription> _items = new();
 
         protected abstract IDescription GetNewDescription(TreeData childData);
 

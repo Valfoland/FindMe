@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using Frameworks.StateMachine;
 using Game.BusinessLogic.Descriptions;
+using Game.Data.BusinessLogic.Descriptions.UiMapDescription;
 using Game.UiController.Windows;
 
 namespace Game.UiController.StateController
 {
     public class UiState : State
     {
-        public UiState(Frameworks.StateMachine.StateController stateController, string stateId,
-            IStateTransitionData transitionsData) : base(stateController, stateId, transitionsData)
+        public UiState(Frameworks.StateMachine.StateController parent, string stateId,
+            IStateTransitionData transitionsData) : base(parent, stateId, transitionsData)
         {
 
         }

@@ -1,5 +1,6 @@
 using Frameworks.StateMachine;
 using Game.BusinessLogic.Descriptions;
+using Game.Data.BusinessLogic.Descriptions.UiMapDescription;
 
 
 namespace Game.UiController.Transitions
@@ -10,9 +11,9 @@ namespace Game.UiController.Transitions
         {
         }
 
-        public override void TransitionTo(State previousState, State nextState)
+        public override void TransitionTo()
         {
-            nextState.OnEnter();
+            To.Enter();
         }
     }
 }

@@ -1,5 +1,6 @@
 using Frameworks.StateMachine;
 using Game.BusinessLogic.Descriptions;
+using Game.Data.BusinessLogic.Descriptions.UiMapDescription;
 using Game.UiController.Windows;
 
 namespace Game.UiController.StateController
@@ -8,30 +9,38 @@ namespace Game.UiController.StateController
     {
         private readonly UiMapDescriptionCollection _uiMap;
         
-        public UiStateController(IStateTransitionData transitionMap) : base(transitionMap)
+        public UiStateController(string stateId, IStateTransitionData transitionMap) : base(null, stateId, transitionMap)
         {
             _uiMap = (UiMapDescriptionCollection) transitionMap;
         }
-        
-        protected override State GetState(string stateId)
+
+        protected override void OnEnter()
         {
-            var transitionCollection = _uiMap.GetChild(stateId);
-            return new UiState(this, stateId, transitionCollection);
+            var states = new State[_uiMap.CountChild];
+            var index = 0;
+            foreach (var ui in _uiMap)
+            {
+                states[index] = new UiState(this, ui.Key, ui.Value);
+
+                foreach (var transition in (UiTransitionDescriptionCollection) ui.Value)
+                {
+                    states[index].AddTransition(GetTransition((UiTransitionDescription) transition.Value));
+                }
+                
+                index++;
+            }
+            
+            Setup(states);
         }
 
-        protected override bool TryGetTransition(string fromStateId, string toStateId, out IStateTransition stateTransition)
+        private IStateTransition GetTransition(UiTransitionDescription transitionDescription)
         {
-            var transitionCollection = _uiMap.GetChild(fromStateId);
-            var transitionDescription = transitionCollection.GetChild(toStateId);
+            return WindowFactory.GetWindowTransition(transitionDescription.TransitionType, transitionDescription);
+        }
 
-            if (transitionDescription != null)
-            {
-                stateTransition = WindowFactory.GetWindowTransition(transitionDescription.TransitionType, transitionDescription);
-                return true;
-            }
-
-            stateTransition = null;
-            return false;
+        protected override IStateAction GetStateAction(string stateId, IStateTransitionData transitionsData)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

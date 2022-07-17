@@ -14,6 +14,11 @@ namespace Game
             Initialize();
         }
 
+        private void OnDestroy()
+        {
+            _characterCreator.Drop();
+        }
+
         private void Initialize()
         {
             _characterCreator = new CharacterCreator();

@@ -2,6 +2,8 @@ namespace Frameworks.StateMachine
 {
     public interface IStateTransition
     {
-        void TransitionTo(State previousState, State nextState);
+        State From { get; }
+        State To { get; }
+        void TransitionTo();
     }
 }

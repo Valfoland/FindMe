@@ -2065,9 +2065,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8818104351713483926}
   - component: {fileID: 3206598000969811692}
-  - component: {fileID: 6483331874649059024}
+  - component: {fileID: 8389085298360933099}
   m_Layer: 0
-  m_Name: Michelle
+  m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2110,7 +2110,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6483331874649059024
+--- !u!114 &8389085298360933099
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2119,10 +2119,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8154861812098336300}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d8670b0e286af24f91b9a8f131e4105, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c821981f51fe144fb6289f6c7976de2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 3206598000969811692}
+  <Animator>k__BackingField: {fileID: 0}
 --- !u!1 &8281990873280210295
 GameObject:
   m_ObjectHideFlags: 0

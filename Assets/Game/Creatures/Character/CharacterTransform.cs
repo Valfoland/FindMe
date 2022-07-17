@@ -1,22 +1,23 @@
+using Frameworks.OEPFramework.UnityEngine.Behaviour;
 using UnityEngine;
 
 namespace Game.Creatures.Character
 {
-    public class CharacterTransform : MonoBehaviour
+    public class CharacterTransform : ICharacterCommand
     {
-        [SerializeField] private Animator _animator;
-    
-        private void Start()
+        private CharacterData _characterData;
+        
+        public CharacterTransform(CharacterData characterData)
         {
-                
+            _characterData = characterData;
         }
 
-        private void Update()
+        public void DoAction()
         {
 #if UNITY_EDITOR
             
             Debug.LogError(Input.GetAxis("Vertical") + " " + Input.GetAxis("Horizontal"));
-            _animator.SetFloat("BlendMove", Input.GetAxis("Vertical"));
+            _characterData.Animator.SetFloat("BlendMove", Input.GetAxis("Vertical"));
 #endif
         }
     }

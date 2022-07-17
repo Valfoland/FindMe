@@ -3,7 +3,7 @@ using Frameworks.BlFramework.Base;
 using Frameworks.BlFramework.Utils;
 using Frameworks.StateMachine;
 
-namespace Game.BusinessLogic.Descriptions
+namespace Game.Data.BusinessLogic.Descriptions.UiMapDescription
 {
     public class UiTransitionDescriptionCollection : DescriptionCollectionBase<UiTransitionDescription>, IEnumerable<KeyValuePair<string, IStateTransitionData>>, IStateTransitionData
     {
@@ -12,11 +12,6 @@ namespace Game.BusinessLogic.Descriptions
             
         }
 
-        public string GetToStateKey()
-        {
-            return Key;
-        }
-        
         protected override IDescription GetNewDescription(TreeData childData)
         {
             return new UiTransitionDescription(childData);

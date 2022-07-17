@@ -1,5 +1,6 @@
 using System;
 using Game.BusinessLogic.Descriptions;
+using Game.Data.BusinessLogic.Descriptions.UiMapDescription;
 using Game.UiController.Transitions;
 using Game.UiController.Utils;
 using Game.UiController.Windows.WindowsUi;

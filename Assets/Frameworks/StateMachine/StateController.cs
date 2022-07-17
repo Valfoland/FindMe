@@ -1,61 +1,71 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Frameworks.StateMachine
 {
-    public abstract class StateController
+    public abstract class StateController : State
     {
-        protected IStateTransitionData TransitionMap { get; private set; }
         protected State CurrentState { get; private set; }
 
-        protected abstract State GetState(string stateId);
-        protected abstract bool TryGetTransition(string fromStateId, string toStateId, out IStateTransition transition);
+        private readonly Dictionary<string, List<IStateTransition>> _states = new();
 
-        private Dictionary<string, State> _states = new();
-
-        protected StateController(IStateTransitionData transitionMap)
+        protected StateController(StateController parent, string stateId, IStateTransitionData transitionsData) : base(parent, stateId, transitionsData)
         {
-            TransitionMap = transitionMap;
         }
         
-        public void SwitchState(string toStateId)
+        protected void Setup(State[] states)
         {
-            var previousState = CurrentState;
-            CurrentState = GetCachedState(toStateId);
-            
-            if (previousState != null && TryGetTransition(previousState.StateId, CurrentState.StateId, out var transition))
+            foreach (var state in states)
             {
-                transition.TransitionTo(previousState, CurrentState);
+                _states[StateId] = state.Transitions;
+            }
+        }
+
+        protected override void DoTransition(string toStateId)
+        {
+            var contains = false;
+            if (string.IsNullOrEmpty(toStateId))
+            {
+                foreach (var state in _states[CurrentState.StateId])
+                {
+                    if (state.To.StateId == toStateId)
+                    {
+                        state.TransitionTo();
+                        CurrentState = state.To;
+                        contains = true;
+                    }
+                }
+
+                if (contains == false)
+                {
+                    if (Parent == null)
+                    {
+                        Debug.LogError("Can't find state with id: " + toStateId);
+                        Finish();
+                    }
+                    else
+                    {
+                        DoTransition(toStateId);
+                    }
+                }
             }
             else
             {
-                DefaultTransition(previousState, CurrentState);
+                Finish();
             }
         }
 
-        private State GetCachedState(string stateId)
+        protected override void OnEnter()
         {
-            var hasState = _states.ContainsKey(stateId);
-
-            if (!hasState)
-            {
-                var state = GetState(stateId);
-                _states.Add(stateId, state);
-
-                return state;
-            }
-
-            return _states[stateId];
         }
 
-        public void RemoveState(string stateId)
+        protected override void OnExit()
         {
-            _states.Remove(stateId);
         }
 
-        private void DefaultTransition(State previousState, State currentState)
+        protected virtual void Finish()
         {
-            previousState?.OnExit();
-            currentState.OnEnter();
+            Exit();
         }
     }
 }

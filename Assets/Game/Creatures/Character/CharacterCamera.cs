@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class CharacterCamera : MonoBehaviour
+namespace Game.Creatures.Character
 {
-    // Start is called before the first frame update
-    void Start()
+    public class CharacterCamera : ICharacterCommand
     {
+        private CharacterData _characterData;
         
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public CharacterCamera(CharacterData characterData)
+        {
+            _characterData = characterData;
+        }
+    
+        public void DoAction()
+        {
+            _characterData.CharacterCameraObject.transform.position = _characterData.CharacterObject.transform.position;
+        }
     }
 }

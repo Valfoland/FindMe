@@ -24,7 +24,7 @@ namespace Game.Data.BusinessLogic.Utils
         private static class FileNames
         {
             private const string UiMapPath = "Data/UiMap.json";
-            private const string CharacterPrefabPath = "Data/UiMap.json";
+            private const string CharacterPrefabPath = "ViewData/CharacterPrefabs.json";
 
             public static HashSet<string> fileHashSet = new()
             {

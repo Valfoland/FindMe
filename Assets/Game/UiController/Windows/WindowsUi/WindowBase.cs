@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Frameworks.OEPFramework.UnityEngine.Behaviour;
 using Frameworks.StateMachine;
 using Game.BusinessLogic.Descriptions;
+using Game.Data.BusinessLogic.Descriptions.UiMapDescription;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -35,7 +36,7 @@ namespace Game.UiController.Windows.WindowsUi
             this.onSetTransition = onSetTransition;
         }
 
-        public virtual void Show()
+        public virtual void Enter()
         {
             if (initialized || dropped) return;
             
@@ -45,7 +46,7 @@ namespace Game.UiController.Windows.WindowsUi
         }
         
 
-        public virtual void Hide()
+        public virtual void Exit()
         {
             onSetTransition = null;
             

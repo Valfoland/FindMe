@@ -1,4 +1,5 @@
 using Game.BusinessLogic.Descriptions;
+using Game.Data.BusinessLogic.Descriptions.UiMapDescription;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,9 +18,9 @@ namespace Game.UiController.Windows.WindowsUi
         {
         }
 
-        public override void Show()
+        public override void Enter()
         {
-            base.Show();
+            base.Enter();
             CreateUiMap();
 
             _settingsButton = GetElementComponent<Button>(SettingsButton);
@@ -30,14 +31,14 @@ namespace Game.UiController.Windows.WindowsUi
             gameObject.SetActive(true);
         }
 
-        public override void Hide()
+        public override void Exit()
         {
             Debug.LogError("HIDE MAIN UI");
             _settingsButton.onClick.RemoveListener(OnSettingsButtonClicked);
             _closeButton.onClick.RemoveListener(OnCloseButtonClicked);
             gameObject.SetActive(false);
 
-            base.Hide();
+            base.Exit();
         }
 
         private void OnCloseButtonClicked()

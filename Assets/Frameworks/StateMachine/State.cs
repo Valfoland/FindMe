@@ -1,44 +1,79 @@
 
+using System.Collections.Generic;
+using Frameworks.OEPFramework.UnityEngine.Behaviour;
+using Frameworks.OEPFramework.UnityEngine.Loop;
+
 namespace Frameworks.StateMachine
 {
-    public abstract class State
+    public abstract class State : LoopBehaviour
     {
-        public string StateId { get; private set; }
-        protected IStateAction CurrentStateAction { get; private set; }
-        protected IStateTransitionData TransitionsData { get; }
+        public string StateId { get; }
+        public bool StateInitialized { get; private set; }
+        public List<IStateTransition> Transitions { get; } = new();
+        public IStateAction CurrentStateAction { get; private set; }
 
+        protected StateController Parent { get; private set; }
         protected abstract IStateAction GetStateAction(string stateId, IStateTransitionData transitionsData);
 
-        protected readonly StateController stateController;
+        private readonly IStateTransitionData _transitionsData;
 
-        protected State(StateController stateController, string stateId, IStateTransitionData transitionsData)
+        protected State(StateController parent, string stateId, IStateTransitionData transitionsData)
         {
-            this.stateController = stateController;
-            
-            TransitionsData = transitionsData;
+            Parent = parent;
             StateId = stateId;
+
+            _transitionsData = transitionsData;
         }
 
-        public virtual void OnEnter()
+        public void Enter()
         {
-            if (CurrentStateAction != null) return;
-            
-            CurrentStateAction = GetStateAction(StateId, TransitionsData);
-            CurrentStateAction.SetTransitionAction(OnSetTransition);
-            CurrentStateAction.Show();
+            if (StateInitialized) return;
+
+            StateInitialized = true;
+
+            OnEnter();
+            LoopOn(Loops.UPDATE, Update);
         }
 
-        public virtual void OnExit()
+        public void Exit()
         {
-            CurrentStateAction.Hide();
+            OnExit();
+            Drop();
+        }
+
+        protected virtual void OnEnter()
+        {
+            CurrentStateAction = GetStateAction(StateId, _transitionsData);
+            CurrentStateAction.SetTransitionAction(OnActionExit);
+            CurrentStateAction.Enter();
+        }
+
+        protected virtual void Update()
+        {
+
+        }
+
+        protected virtual void OnExit()
+        {
+            CurrentStateAction.Exit();
             CurrentStateAction = null;
 
-            stateController.RemoveState(StateId);
+            StateInitialized = false;
         }
 
-        private void OnSetTransition(string toStateTransition)
+        protected virtual void DoTransition(string stateId)
         {
-            stateController.SwitchState(toStateTransition);
+            Parent.DoTransition(stateId);
+        }
+
+        public void AddTransition(IStateTransition stateTransition)
+        {
+            Transitions.Add(stateTransition);
+        }
+
+        private void OnActionExit(string toStateTransition)
+        {
+            DoTransition(toStateTransition);
         }
     }
 }

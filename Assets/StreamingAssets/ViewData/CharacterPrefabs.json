@@ -1,8 +1,8 @@
 {
   "CharacterCamera": {
-    "Path": ""
+    "Path": "ModelPrefabs/CharacterPrefabs/CharacterCamera"
   },
-  "Michelle": {
-    "Path": "Assets/Resources/ModelPrefabs/CharacterPrefabs/Michelle"
+  "Character": {
+    "Path": "ModelPrefabs/CharacterPrefabs/Character"
   }
 }
