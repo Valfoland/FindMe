@@ -86,7 +86,7 @@ AnimatorController:
   m_Name: Character
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: BlendMove
+  - m_Name: BlendKoeff
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -242,8 +242,8 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: RunSpeed
     m_Mirror: 0
-  m_BlendParameter: BlendMove
-  m_BlendParameterY: BlendMove
+  m_BlendParameter: BlendKoeff
+  m_BlendParameterY: BlendKoeff
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1

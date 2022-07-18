@@ -15,9 +15,7 @@ namespace Game.Creatures.Character
         public void DoAction()
         {
 #if UNITY_EDITOR
-            
-            Debug.LogError(Input.GetAxis("Vertical") + " " + Input.GetAxis("Horizontal"));
-            _characterData.Animator.SetFloat("BlendMove", Input.GetAxis("Vertical"));
+            _characterData.Animator.SetFloat("BlendKoeff", Input.GetAxis("Vertical"));
 #endif
         }
     }

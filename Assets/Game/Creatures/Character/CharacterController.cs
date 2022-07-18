@@ -7,8 +7,6 @@ namespace Game.Creatures.Character
 {
     public class CharacterController : LoopBehaviour
     {
-        private GameObject character;
-        private GameObject characterCamera;
         private CharacterData _characterData;
         
         private List<ICharacterCommand> _commands = new();

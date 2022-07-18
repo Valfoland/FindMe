@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Game.Creatures.Character
 {
     public class CharacterCamera : ICharacterCommand
@@ -11,7 +13,9 @@ namespace Game.Creatures.Character
     
         public void DoAction()
         {
-            _characterData.CharacterCameraObject.transform.position = _characterData.CharacterObject.transform.position;
+            var characterPos = _characterData.CharacterObject.transform.position;
+            var pos = new Vector3(characterPos.x, characterPos.y + 5, characterPos.z);
+            _characterData.CharacterCameraObject.transform.position = pos;
         }
     }
 }
