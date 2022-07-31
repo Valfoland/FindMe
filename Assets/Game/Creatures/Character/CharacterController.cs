@@ -13,6 +13,7 @@ namespace Game.Creatures.Character
         
         public CharacterController(CharacterData characterData)
         {
+            Debug.Log("qq1wqw");
             _characterData = characterData;
 
             RegistryCommands();
