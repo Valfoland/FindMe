@@ -1,0 +1,8 @@
+{
+  "CharacterCamera": {
+    "Path": "ModelPrefabs/CharacterPrefabs/CharacterCamera"
+  },
+  "Character": {
+    "Path": "ModelPrefabs/CharacterPrefabs/Character"
+  }
+}

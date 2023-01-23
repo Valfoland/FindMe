@@ -1,0 +1,20 @@
+{
+  "MainUi": {
+    "SettingsWindow": {
+      "TransitionType": "Soft"
+    },
+    "CloseWindow": {
+      "TransitionType": "Soft"
+    }
+  },
+  "SettingsWindow": {
+    "MainUi": {
+      "TransitionType": "Hard"
+    }
+  },
+  "CloseWindow": {
+    "MainUi": {
+      "TransitionType": "Hard"
+    }
+  }
+}
