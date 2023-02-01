@@ -89,30 +89,7 @@ guids*
 /removedefine.bat
 /removedefine.exe
 /Assets/StreamingAssets.meta
-/Assets/3rdParty/PlayMaker/Editor/Install
-/Assets/3rdParty/PlayMaker/Versions.meta
-/Assets/3rdParty/PlayMaker/Versions
-/Assets/3rdParty/PlayMaker/Editor/Resources/EditorStartupPrefs.asset
 
-Assets/Resources/Build_Settings.json
-/Assets/Resources/Build_Settings.json.meta
-/timeline-results.txt
-/Assets/3rdParty/PlayMaker/Editor/Resources/EditorStartupPrefs.asset
-/Assets/3rdParty/codeandweb.com/Editor/SettingsTexturePackerImporter.txt
-/Assets/3rdParty/codeandweb.com/Editor/SettingsTexturePackerImporter.txt.meta
-/faketimeline-results.txt
-
-# Local cache
-/Assets/StreamingAssets/LocalCache/
-/Assets/StreamingAssets/LocalCache.meta
-Assets/Resources/cache.txt
-Assets/Resources/cache.txt.meta
-assetpack/
-
-# Articy Debug Log
-ArticyExport.log
-Utils/ArticyToUnity/obj
-Utils/ArticyToUnity/.idea
 
 # Local VisualStudio Settings 
 .editorconfig
@@ -126,3 +103,5 @@ Utils/ArticyToUnity/.idea
 
 # Google Autorization Token
 /_editor/google-token/
+
+/UserSettings/
