@@ -1,15 +1,18 @@
 using Basement.Common;
+using UnityEngine;
 
 
 namespace BusinessLogic
 {
     public class PlayerContext
     {
-        private readonly RawNode _rootNode;
+        private readonly RawNode _playerProgressNode;
+        private readonly RawNode _repositoryNode;
         
-        public PlayerContext(RawNode rootNode)
+        public PlayerContext(RawNode playerProgressNode, RawNode repositoryNode)
         {
-            _rootNode = rootNode;
+            _playerProgressNode = playerProgressNode;
+            _repositoryNode = repositoryNode;
         }
         
         public void Initialize()

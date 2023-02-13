@@ -7,7 +7,7 @@ namespace Services
     {
         public override void InstallBindings()
         {
-            Container.Bind<string>().AsSingle().NonLazy();
+            
         }
     }
 }

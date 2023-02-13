@@ -7,29 +7,55 @@ using UnityEngine;
 
 namespace BusinessLogic
 {
-    public class DataKeeper
+    public static class DataKeeper
     {
-        private const string DirectoryPathsFilePath = "/directoryPaths.json";
-        
-        public static readonly string editorSaveDirectory = $"{Application.dataPath}/../data/data.json";
-        public static readonly string defaultSaveDirectory = $"{Application.persistentDataPath}/data.json";
-        public RawNode Repositories => _repositories;
-        private RawNode _repositories;
+        private const string FilePathKey = "file-path";
+        private const string DirectoryPathsFilePath = "directories-paths.json";
+        private const string DataFilePath = "data.json";
 
-        public void LoadData()
+        public static string SaveDirectory
         {
-            var files = new RawNode(JSON.Instance.Parse(File.ReadAllText(editorSaveDirectory + "/files.json")));
+            get
+            {
+#if UNITY_EDITOR
+                return editorSaveDirectory;
+#else
+                return defaultSaveDirectory;
+#endif
+            }
+        }
+
+        private static readonly string editorSaveDirectory = $"{Application.dataPath}/../data";
+        private static readonly string defaultSaveDirectory = $"{Application.persistentDataPath}";
+
+
+        public static RawNode PlayerProgress => _playerProgress;
+        public static RawNode Repositories => _repositories;
+        private static RawNode _repositories;
+        private static RawNode _playerProgress;
+
+        public static RawNode LoadProgress()
+        {
+            _playerProgress = new RawNode(JSON.Instance.Parse(File.ReadAllText(Path.Combine(SaveDirectory, DataFilePath))));
+            return _playerProgress;
+        }
+        
+        public static RawNode LoadRepositories()
+        {
+            var files = new RawNode(JSON.Instance.Parse(File.ReadAllText(Path.Combine(SaveDirectory, DirectoryPathsFilePath))));
             var allRepos = new Dictionary<string, object>();
-            
+
             foreach (var file in files.GetSortedCollection())
             {
-                var fileName = file.Value.GetString("file");
-                var fileBody = File.ReadAllText(editorSaveDirectory + "/" + fileName);
-                var jsonDict = (Dictionary<string, object>)JSON.Instance.Parse(fileBody);
+                var filePath = file.Value.GetString(FilePathKey);
+                var fileBody = File.ReadAllText(Path.Combine(SaveDirectory, filePath));
+                var jsonDict = (Dictionary<string, object>) JSON.Instance.Parse(fileBody);
                 allRepos.Add(file.Key, jsonDict);
             }
 
             _repositories = new RawNode(allRepos);
+
+            return _repositories;
         }
     }
 }
