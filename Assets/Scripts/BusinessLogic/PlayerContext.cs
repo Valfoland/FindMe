@@ -1,10 +1,11 @@
 using Basement.Common;
 using UnityEngine;
+using Zenject;
 
 
 namespace BusinessLogic
 {
-    public class PlayerContext
+    public class PlayerContext : IInitializable
     {
         private readonly RawNode _playerProgressNode;
         private readonly RawNode _repositoryNode;
@@ -17,7 +18,7 @@ namespace BusinessLogic
         
         public void Initialize()
         {
-            
+            Debug.LogError("INIT");
         }
     }
 }

@@ -1,28 +1,36 @@
 using BusinessLogic;
 using BusinessLogic.ContextFactory;
+using Services;
+using UnityEngine;
 using Zenject;
 
 
-namespace Services
+namespace Initial
 {
     public class ProjectInstaller : MonoInstaller
     {
+        [SerializeField] private ConfigService _configService;
+
+
         public override void InstallBindings()
         {
             InstallPlayer();
+
+            Container.Bind<ConfigService>().FromComponentInNewPrefab(_configService).AsSingle();
         }
+
 
         private void InstallPlayer()
         {
             var contextFactory = new DefaultPlayerContextCreator();
             var context = contextFactory.CreateContext(DataKeeper.LoadProgress(), DataKeeper.LoadRepositories());
 
-            var binder = Container.Bind<PlayerContext>().FromInstance(context);
-            binder.AsSingle().NonLazy();
-            binder.OnInstantiated<PlayerContext>((ctx, obj) =>
+            var playerContextBind = Container.Bind<PlayerContext>().FromInstance(context);
+            playerContextBind.OnInstantiated((_, playerContext) =>
             {
-                obj.Initialize();
+                ((PlayerContext) playerContext).Initialize();
             });
+            playerContextBind.AsSingle().NonLazy();
         }
     }
 }

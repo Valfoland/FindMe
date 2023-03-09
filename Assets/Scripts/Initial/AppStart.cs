@@ -1,20 +1,22 @@
+using System;
 using UnityEngine;
 using Zenject;
 
 
 namespace Initial
 {
-    public class AppStart : Installer
+    public class AppStart : MonoBehaviour
     {
-        public override void InstallBindings()
+        private void Start()
         {
-            Debug.LogError("aaaa");
+            
         }
 
 
-        public void Drop()
+        [Inject]
+        public void Construct(DiContainer container)
         {
-            
+            Debug.LogError(container);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 
 namespace Frameworks.FSM
@@ -11,7 +12,8 @@ namespace Frameworks.FSM
 
         public abstract void Transit(Action<StateBase> onCompleted);
 
-        public StateTransitionBase(string transitionTag, StateBase fromState, StateBase toState)
+
+        protected StateTransitionBase(string transitionTag, StateBase fromState, StateBase toState)
         {
             TransitionTag = transitionTag;
             this.fromState = fromState;

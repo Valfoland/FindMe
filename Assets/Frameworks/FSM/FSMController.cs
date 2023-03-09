@@ -85,7 +85,13 @@ namespace Frameworks.FSM
         public void Transit(string transitionTag)
         {
             var transition = currentState.stateTransitions.FirstOrDefault(t => t.TransitionTag == transitionTag);
-            transition?.Transit(newState =>
+
+            if (transition == null)
+            {
+                throw new Exception($"Cannot transit to state by tag: {transitionTag}");
+            }
+            
+            transition.Transit(newState =>
             {
                 currentState = newState;
             });

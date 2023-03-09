@@ -1,14 +1,12 @@
-using Basement.OEPFramework.UnityEngine;
+   using Basement.OEPFramework.UnityEngine;
 using Basement.OEPFramework.UnityEngine.Loop;
-using System;
 using UnityEngine;
 
 
 namespace Initial
 {
-   public class EntryPoint : MonoBehaviour
+   public class LoopsInitializer : MonoBehaviour
    {
-      private AppStart _appStart;
       private bool _initialized;
 
       private void Awake()
@@ -18,8 +16,6 @@ namespace Initial
             Loops.Init();
             _initialized = true;
          }
-
-         _appStart = new AppStart();
       }
 
       private void FixedUpdate()
@@ -38,12 +34,6 @@ namespace Initial
       private void LateUpdate()
       {
          EngineLoopManager.Execute(Loops.LATE_UPDATE);
-      }
-
-
-      private void OnApplicationQuit()
-      {
-         _appStart.Drop();
       }
    }
 }

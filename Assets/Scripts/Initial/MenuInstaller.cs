@@ -1,13 +1,14 @@
+using Ui;
 using Zenject;
 
 
-namespace Services
+namespace Initial
 {
     public class MenuInstaller : MonoInstaller
     {
         public override void InstallBindings()
         {
-            
+            Container.Bind<UiManager>().AsSingle().NonLazy();
         }
     }
 }
