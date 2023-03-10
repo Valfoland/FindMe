@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Ui
 {
-    public class DynamicGuiBehaviour : GUIBehaviour
+    public class WindowGuiBehaviour : GUIBehaviour
     {
         private const string SoundClose = "";
 
@@ -18,28 +18,28 @@ namespace Ui
 
         public WindowType WindowType { get; private set; }
 
-        public event Action<DynamicGuiBehaviourState> StateChanged;
+        public event Action<WindowGuiBehaviourState> StateChanged;
 
         protected event Action<bool> WindowActivated;
 
-        public DynamicGuiBehaviourState CurrentState { get; private set; } = DynamicGuiBehaviourState.None;
+        public WindowGuiBehaviourState CurrentState { get; private set; } = WindowGuiBehaviourState.None;
 
-        public virtual bool IsTapable => CurrentState == DynamicGuiBehaviourState.Visible;
+        public virtual bool IsTapable => CurrentState == WindowGuiBehaviourState.Visible;
 
 
-        protected DynamicGuiBehaviour(GameObject go, WindowType windowType) : base(go)
+        protected WindowGuiBehaviour(GameObject go, WindowType windowType) : base(go)
         {
             WindowType = windowType;
         }
 
 
-        protected DynamicGuiBehaviour(string prefabPath, RectTransform parent, WindowType windowType) : base(prefabPath, parent)
+        protected WindowGuiBehaviour(string prefabPath, RectTransform parent, WindowType windowType) : base(prefabPath, parent)
         {
             WindowType = windowType;
         }
 
 
-        protected DynamicGuiBehaviour(GameObject template, RectTransform parent, WindowType windowType) : base(template, parent)
+        protected WindowGuiBehaviour(GameObject template, RectTransform parent, WindowType windowType) : base(template, parent)
         {
             WindowType = windowType;
         }
@@ -73,14 +73,14 @@ namespace Ui
 
             guiEffects.Clear();
 
-            SetState(DynamicGuiBehaviourState.Destroyed);
+            SetState(WindowGuiBehaviourState.Destroyed);
             base.Drop();
         }
 
 
         public virtual void Show()
         {
-            SetState(DynamicGuiBehaviourState.Constructed);
+            SetState(WindowGuiBehaviourState.Constructed);
             SetActive(true);
 
             foreach (var effectBehaviour in guiEffects)
@@ -94,12 +94,12 @@ namespace Ui
         {
             _dropItem = dropItem;
 
-            if (CurrentState == DynamicGuiBehaviourState.Constructed || dropped)
+            if (CurrentState == WindowGuiBehaviourState.Constructed || dropped)
             {
                 return;
             }
 
-            SetState(DynamicGuiBehaviourState.Closing);
+            SetState(WindowGuiBehaviourState.Closing);
 
             if (guiEffects.Count > 0)
             {
@@ -162,7 +162,7 @@ namespace Ui
         protected virtual void OnUpdate() { }
 
 
-        protected void SetState(DynamicGuiBehaviourState newState)
+        protected void SetState(WindowGuiBehaviourState newState)
         {
             if (CurrentState != newState)
             {
@@ -195,7 +195,7 @@ namespace Ui
 
             if (check)
             {
-                SetState(DynamicGuiBehaviourState.Hidden);
+                SetState(WindowGuiBehaviourState.Hidden);
 
                 if (_dropItem)
                 {
@@ -226,25 +226,25 @@ namespace Ui
 
             if (check)
             {
-                SetState(DynamicGuiBehaviourState.Visible);
+                SetState(WindowGuiBehaviourState.Visible);
             }
         }
 
 
         private void Update()
         {
-            if (CurrentState == DynamicGuiBehaviourState.Closing)
+            if (CurrentState == WindowGuiBehaviourState.Closing)
             {
                 WindowIsClosing();
                 return;
             }
 
-            if (CurrentState == DynamicGuiBehaviourState.Constructed)
+            if (CurrentState == WindowGuiBehaviourState.Constructed)
             {
                 WindowIsOpening();
             }
 
-            if (CurrentState == DynamicGuiBehaviourState.Visible)
+            if (CurrentState == WindowGuiBehaviourState.Visible)
             {
                 OnUpdate();
             }

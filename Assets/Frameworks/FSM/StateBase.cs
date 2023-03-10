@@ -14,13 +14,6 @@ namespace Frameworks.FSM
         public event Action OnExitEvent;
         
         public readonly List<StateTransitionBase> stateTransitions = new();
-        
-        protected readonly FSMController fsmController;
-
-        public StateBase(FSMController fsmController)
-        {
-            this.fsmController = fsmController;
-        }
 
         public void AddCustomTransition(StateTransitionBase stateTransitionBase)
         {

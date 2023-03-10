@@ -1,6 +1,6 @@
 namespace Ui
 {
-    public enum DynamicGuiBehaviourState
+    public enum WindowGuiBehaviourState
     {
         None,
         Constructed,

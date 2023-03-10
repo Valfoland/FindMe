@@ -1,11 +1,13 @@
+using Basement.OEPFramework.UnityEngine._Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 
 namespace Frameworks.FSM
 {
-    public abstract class FSMController
+    public class FsmController : DroppableItemBase
     {
         protected readonly List<StateBase> states = new();
         protected StateBase currentState;
@@ -20,7 +22,16 @@ namespace Frameworks.FSM
             currentState = states[0];
             currentState.OnEnter();
         }
-        
+
+
+        public override void Drop()
+        {
+            CloseCurrentState();
+            
+            base.Drop();
+        }
+
+
         public void AddState(StateBase state)
         {
             if (states.Any(cachedState => cachedState.Id == state.Id) || !states.Contains(state))
@@ -47,9 +58,37 @@ namespace Frameworks.FSM
             states.Remove(state);
         }
 
+
+        public void CloseCurrentState()
+        {
+            CloseState(currentState);
+        }
+        
+        
+        public void CloseState(string stateTag)
+        {
+            if (GetStateByTag(stateTag, out var state))
+            {
+                state.OnExit();
+            }
+        }
+        
+
+        public void CloseState(StateBase state)
+        {
+            if (state == null)
+            {
+                Debug.LogError($"State: {state} is null");
+                return;
+            }
+            
+            state.OnExit();
+        }
+        
+
         public void SetState(string stateTag)
         {
-            if (TryGetStateByTag(stateTag, out var state))
+            if (GetStateByTag(stateTag, out var state))
             {
                 SetState(state);
             }
@@ -57,8 +96,15 @@ namespace Frameworks.FSM
         
         public void SetState(StateBase state)
         {
-            if (state == null || currentState == state)
+            if (state == null)
             {
+                Debug.LogError($"State: {state} is null");
+                return;
+            }
+            
+            if (currentState == state)
+            {
+                Debug.LogError($"State: {state} is already started");
                 return;
             }
 
@@ -69,7 +115,7 @@ namespace Frameworks.FSM
             });
         }
 
-        public bool TryGetStateByTag(string stateTag, out StateBase state)
+        public bool GetStateByTag(string stateTag, out StateBase state)
         {
             var requiredState = states.FirstOrDefault(s => s.Tag == stateTag);
             if (requiredState != null)
@@ -78,6 +124,7 @@ namespace Frameworks.FSM
                 return true;
             }
 
+            Debug.LogError($"Cannot find state by tag: {stateTag}");
             state = null;
             return false;
         }

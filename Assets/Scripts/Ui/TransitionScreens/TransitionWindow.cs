@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Ui.TransitionScreens
 {
-    public abstract class TransitionScreen : DynamicGuiBehaviour
+    public abstract class TransitionScreen : WindowGuiBehaviour
     {
         public abstract void Transit();
 

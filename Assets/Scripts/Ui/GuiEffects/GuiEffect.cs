@@ -6,16 +6,16 @@ namespace Ui.GuiEffects
 {
     public abstract class GuiEffect : ControlLoopBehaviour
     {
-        protected readonly WeakRef<DynamicGuiBehaviour> weakGUIBehaviour;
+        protected readonly WeakRef<WindowGuiBehaviour> weakGUIBehaviour;
 
         public GuiEffectState State { get; protected set; }
 
 
-        protected GuiEffect(DynamicGuiBehaviour guiBehaviour = null)
+        protected GuiEffect(WindowGuiBehaviour guiBehaviour = null)
         {
             if (guiBehaviour != null)
             {
-                weakGUIBehaviour = new WeakRef<DynamicGuiBehaviour>(guiBehaviour);
+                weakGUIBehaviour = new WeakRef<WindowGuiBehaviour>(guiBehaviour);
             }
         }
 

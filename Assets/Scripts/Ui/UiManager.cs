@@ -3,7 +3,6 @@ using Services;
 using System;
 using System.Collections.Generic;
 using Ui.TransitionScreens;
-using UnityEngine;
 
 
 namespace Ui
@@ -11,7 +10,7 @@ namespace Ui
     public class UiManager
     {
         private readonly UiWindowsConfig _windowsConfig;
-        private readonly Dictionary<WindowType, DynamicGuiBehaviour> _cachedWindows = new();
+        private readonly Dictionary<WindowType, WindowGuiBehaviour> _cachedWindows = new();
 
         private TransitionScreen _transitionScreen;
 
@@ -19,24 +18,23 @@ namespace Ui
         public UiManager(ConfigService configService)
         {
             _windowsConfig = configService.WindowsConfig;
-            Debug.LogError("CONF");
         }
 
         
-        private void ShowScreen(DynamicGuiBehaviour screen)
+        private void ShowScreen(WindowGuiBehaviour screen)
         {
             screen.Create();
             screen.Show();
         }
 
 
-        private void HideScreen(DynamicGuiBehaviour screen, bool hideWithDrop)
+        private void HideScreen(WindowGuiBehaviour screen, bool hideWithDrop)
         {
             screen.Hide(hideWithDrop);
         }
 
 
-        public T Get<T>(WindowType uiScreenType) where T : DynamicGuiBehaviour
+        public T Get<T>(WindowType uiScreenType) where T : WindowGuiBehaviour
         {
             var screenPrefab = _windowsConfig.Windows[uiScreenType];
 
@@ -47,7 +45,7 @@ namespace Ui
         }
 
 
-        public T Hide<T>(WindowType uiScreenType, Action onComplete, bool hideWithDrop = false) where T : DynamicGuiBehaviour
+        public T Hide<T>(WindowType uiScreenType, Action onComplete, bool hideWithDrop = false) where T : WindowGuiBehaviour
         {
             var window = Get<T>(uiScreenType);
 
@@ -58,7 +56,7 @@ namespace Ui
         }
 
 
-        public T Show<T>(WindowType uiScreenType, Action onComplete, WindowType transitionWindowType = WindowType.None) where T : DynamicGuiBehaviour
+        public T Show<T>(WindowType uiScreenType, Action onComplete, WindowType transitionWindowType = WindowType.None) where T : WindowGuiBehaviour
         {
             var window = Get<T>(uiScreenType);
 
@@ -73,7 +71,7 @@ namespace Ui
         }
 
 
-        public T Show<T>(T screen, WindowType transitionWindowType = WindowType.None) where T : DynamicGuiBehaviour
+        public T Show<T>(T screen, WindowType transitionWindowType = WindowType.None) where T : WindowGuiBehaviour
         {
             ShowScreen(screen);
 

@@ -2,6 +2,7 @@ namespace Ui
 {
     public enum WindowType
     {
-        None
+        None,
+        MenuUi
     }
 }
