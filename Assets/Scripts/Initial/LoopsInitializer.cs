@@ -1,21 +1,14 @@
-   using Basement.OEPFramework.UnityEngine;
+using Basement.OEPFramework.UnityEngine;
 using Basement.OEPFramework.UnityEngine.Loop;
 using UnityEngine;
-
 
 namespace Initial
 {
    public class LoopsInitializer : MonoBehaviour
    {
-      private bool _initialized;
-
-      private void Awake()
+      public void Initialize()
       {
-         if (!_initialized)
-         {
-            Loops.Init();
-            _initialized = true;
-         }
+         Loops.Init();
       }
 
       private void FixedUpdate()

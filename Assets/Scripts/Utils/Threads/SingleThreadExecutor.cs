@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-
 namespace Utils.Threads
 {
     public class SingleThreadExecutor : IExecutor
     {
         public int TaskCount => _taskCount;
+
         private readonly Queue<IFuture> _tasks = new Queue<IFuture>(128);
         private readonly ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
         private readonly object _syncRoot = new object();
@@ -21,36 +21,6 @@ namespace Utils.Threads
             _thread = new Thread(Work) { Priority = threadPriority, IsBackground = true };
             _thread.Start();
             while (!_thread.IsAlive) { }
-        }
-
-        private void Work()
-        {
-            _thread.Name = $"Single thread executor {_thread.ManagedThreadId}";
-            while (!_shutdown)
-            {
-                lock (_syncRoot)
-                {
-                    if (_tasks.Count == 0 && !_shutdown)
-                    {
-                        _manualResetEvent.Reset();
-                    }
-                }
-
-                _manualResetEvent.WaitOne();
-
-                while (_tasks.Count > 0)
-                {
-                    IFuture future;
-
-                    lock (_syncRoot)
-                    {
-                        future = _tasks.Dequeue();
-                    }
-
-                    future.Run();
-                    Interlocked.Decrement(ref _taskCount);
-                }
-            }
         }
 
         public void Shutdown()
@@ -109,6 +79,36 @@ namespace Utils.Threads
         public void Join()
         {
             _thread.Join();
+        }
+
+        private void Work()
+        {
+            _thread.Name = $"Single thread executor {_thread.ManagedThreadId}";
+            while (!_shutdown)
+            {
+                lock (_syncRoot)
+                {
+                    if (_tasks.Count == 0 && !_shutdown)
+                    {
+                        _manualResetEvent.Reset();
+                    }
+                }
+
+                _manualResetEvent.WaitOne();
+
+                while (_tasks.Count > 0)
+                {
+                    IFuture future;
+
+                    lock (_syncRoot)
+                    {
+                        future = _tasks.Dequeue();
+                    }
+
+                    future.Run();
+                    Interlocked.Decrement(ref _taskCount);
+                }
+            }
         }
     }
 }

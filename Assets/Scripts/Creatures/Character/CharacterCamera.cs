@@ -1,10 +1,13 @@
+using Game.Creatures.Character;
 using UnityEngine;
 
-namespace Game.Creatures.Character
+namespace Creatures.Character
 {
     public class CharacterCamera : ICharacterCommand
     {
+        private const float CameraRotationLimitX = 25;
         private const float RotationSpeed = 4f;
+        private const float CameraViewOffsetY = 1;
         
         private Vector3 _offset;
         private CharacterData _characterData;
@@ -18,8 +21,11 @@ namespace Game.Creatures.Character
             _characterData = characterData;
             
             _offset = _characterData.CharacterCameraObject.transform.localPosition;
-            _cameraRotationY = _characterData.CharacterCameraObject.transform.eulerAngles.y;
-            _cameraRotationX = _characterData.CharacterCameraObject.transform.eulerAngles.x;
+
+            var eulerAngles = _characterData.CharacterCameraObject.transform.eulerAngles;
+            
+            _cameraRotationY = eulerAngles.y;
+            _cameraRotationX = eulerAngles.x;
         }
     
         public void DoAction()
@@ -31,7 +37,7 @@ namespace Game.Creatures.Character
         {
             _cameraRotationY += Input.GetAxis("Mouse X") * RotationSpeed;
             _cameraRotationX -= Input.GetAxis("Mouse Y") * RotationSpeed;
-            _cameraRotationX = Mathf.Clamp(_cameraRotationX, -25, 25);
+            _cameraRotationX = Mathf.Clamp(_cameraRotationX, -CameraRotationLimitX, CameraRotationLimitX);
 
             var characterTransform = _characterData.CharacterObject.transform;
             var characterTransformPosition = characterTransform.position;
@@ -40,7 +46,7 @@ namespace Game.Creatures.Character
             
             _characterData.CharacterCameraObject.transform.position = characterTransformPosition + trs.MultiplyVector(_offset);
 
-            var lookPosition = new Vector3(characterTransformPosition.x, characterTransformPosition.y + 1, characterTransformPosition.z);
+            var lookPosition = new Vector3(characterTransformPosition.x, characterTransformPosition.y + CameraViewOffsetY, characterTransformPosition.z);
             
             _characterData.CharacterCameraObject.transform.LookAt(lookPosition);
         }

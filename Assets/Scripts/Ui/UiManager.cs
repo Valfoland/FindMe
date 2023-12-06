@@ -1,26 +1,24 @@
-using Configs;
 using Services;
-using System;
 using System.Collections.Generic;
-using Ui.TransitionScreens;
+using BusinessLogic.ViewConfigs;
 
 
 namespace Ui
 {
     public class UiManager
     {
-        private readonly UiWindowsConfig _windowsConfig;
+        private readonly SceneService _sceneService;
+        private readonly UiConfig _uiConfig;
         private readonly Dictionary<WindowType, WindowGuiBehaviour> _cachedWindows = new();
 
-        private TransitionScreen _transitionScreen;
 
-
-        public UiManager(ConfigService configService)
+        public UiManager(ConfigsProvider configsProvider, SceneService sceneService)
         {
-            _windowsConfig = configService.WindowsConfig;
+            _sceneService = sceneService;
+            _uiConfig = configsProvider.UiConfig;
         }
 
-        
+
         private void ShowScreen(WindowGuiBehaviour screen)
         {
             screen.Create();
@@ -34,74 +32,52 @@ namespace Ui
         }
 
 
-        public T Get<T>(WindowType uiScreenType) where T : WindowGuiBehaviour
+        public T Get<T>(WindowType windowType) where T : WindowGuiBehaviour
         {
-            var screenPrefab = _windowsConfig.Windows[uiScreenType];
+            _cachedWindows.TryGetValue(windowType, out var window);
+            window ??= UiFactory.GetWindow(windowType, _uiConfig, _sceneService.GetActiveSceneData().UiRoot);
 
-            _cachedWindows.TryGetValue(uiScreenType, out var screen);
-            screen ??= UiMap.GetScreen(uiScreenType, screenPrefab);
-
-            return (T) screen;
+            return (T) window;
         }
 
 
-        public T Hide<T>(WindowType uiScreenType, Action onComplete, bool hideWithDrop = false) where T : WindowGuiBehaviour
+        public T Hide<T>(WindowType windowType, bool hideWithDrop = false) where T : WindowGuiBehaviour
         {
-            var window = Get<T>(uiScreenType);
+            var window = Get<T>(windowType);
 
             HideScreen(window, hideWithDrop);
-            //window.StateChanged
+
+            if (hideWithDrop)
+            {
+                _cachedWindows.Remove(windowType);
+            }
 
             return window;
         }
 
 
-        public T Show<T>(WindowType uiScreenType, Action onComplete, WindowType transitionWindowType = WindowType.None) where T : WindowGuiBehaviour
+        public T Hide<T>(T window, bool hideWithDrop = false) where T : WindowGuiBehaviour
         {
-            var window = Get<T>(uiScreenType);
+            HideScreen(window, hideWithDrop);
+
+            if (hideWithDrop)
+            {
+                _cachedWindows.Remove(window.WindowType);
+            }
+
+            return window;
+        }
+
+
+        public T Show<T>(WindowType windowType) where T : WindowGuiBehaviour
+        {
+            var window = Get<T>(windowType);
+
+            _cachedWindows.Add(windowType, window);
 
             ShowScreen(window);
 
-            if (transitionWindowType != WindowType.None)
-            {
-                Transit(GetTransitionScreen(transitionWindowType));
-            }
-
             return window;
-        }
-
-
-        public T Show<T>(T screen, WindowType transitionWindowType = WindowType.None) where T : WindowGuiBehaviour
-        {
-            ShowScreen(screen);
-
-            if (transitionWindowType != WindowType.None)
-            {
-                Transit(GetTransitionScreen(transitionWindowType));
-            }
-
-            return screen;
-        }
-
-
-        private void OnStateChanged()
-        {
-            
-        }
-
-
-        private TransitionScreen GetTransitionScreen(WindowType transitionScreenType)
-        {
-            return (TransitionScreen) UiMap.GetScreen(transitionScreenType, _windowsConfig.Windows[transitionScreenType]);
-        }
-
-
-        private void Transit(TransitionScreen transition)
-        {
-            _transitionScreen?.Drop();
-            _transitionScreen = transition;
-            transition.Create();
-            transition.Transit();
         }
     }
 }

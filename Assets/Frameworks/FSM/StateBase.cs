@@ -1,3 +1,4 @@
+using Basement.OEPFramework.UnityEngine._Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,49 +6,55 @@ using System.Linq;
 
 namespace Frameworks.FSM
 {
-    public abstract class StateBase
+    public abstract class StateBase : DroppableItemBase
     {
-        public int Id { get; private set; }
-        public string Tag { get; private set; }
+        public abstract string Id { get; }
+
+
+        public event Action OnEnterState;
         
-        public event Action OnEnterEvent;
-        public event Action OnExitEvent;
+        public event Action OnExitState;
+
+        public event Action OnFinishState; 
+
+
+        public readonly List<StateTransition> stateTransitions = new();
         
-        public readonly List<StateTransitionBase> stateTransitions = new();
+        
 
-        public void AddCustomTransition(StateTransitionBase stateTransitionBase)
+        public void AddTransition(StateBase stateBase, params Func<bool>[] predicates)
         {
-            stateTransitions.Add(stateTransitionBase);
+            stateTransitions.Add(new StateTransition(this, stateBase, predicates.ToList()));
         }
 
-        public void AddTransition(StateBase stateBase, string transitionTag, params Func<bool>[] predicates)
-        {
-            stateTransitions.Add(new PredicatedStateTransition(transitionTag, this, stateBase, predicates.ToList()));
-        }
 
-        public void AddTransition(StateBase stateBase, string transitionTag)
+        public void AddTransition(StateBase stateBase)
         {
-            stateTransitions.Add(new DefaultStateTransition(transitionTag, this, stateBase));
-        }
-
-        public void RemoveTransition(string transitionTag)
-        {
-            var transition = stateTransitions.FirstOrDefault(t => t.TransitionTag == transitionTag);
-
-            if (transition != null)
-            {
-                stateTransitions.Remove(transition);
-            }
+            stateTransitions.Add(new StateTransition(this, stateBase, null));
         }
 
         public virtual void OnEnter()
         {
-            OnEnterEvent?.Invoke();
+            OnEnterState?.Invoke();
         }
-
+        
         public virtual void OnExit()
         {
-            OnExitEvent?.Invoke();
+            OnExitState?.Invoke();
+        }
+
+        protected void FinishState()
+        {
+            OnFinishState?.Invoke();
+        }
+        
+        public override void Drop()
+        {
+            OnEnterState = null;
+            OnExitState = null;
+            OnFinishState = null;
+
+            base.Drop();
         }
     }
 }

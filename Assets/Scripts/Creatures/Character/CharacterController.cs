@@ -1,9 +1,9 @@
+using System.Collections.Generic;
 using Basement.OEPFramework.UnityEngine.Behaviour;
 using Basement.OEPFramework.UnityEngine.Loop;
-using System.Collections.Generic;
+using Game.Creatures.Character;
 
-
-namespace Game.Creatures.Character
+namespace Creatures.Character
 {
     public class CharacterController : LoopBehaviour
     {

@@ -1,43 +1,40 @@
-using StateBuilders;
-using System;
+using FlowBuilders;
+using Services;
 using Ui;
+using UnityEngine.SceneManagement;
 using Zenject;
-
 
 namespace Initial
 {
     public class MenuInstaller : MonoInstaller
     {
-        private MenuStateBuilder _menuUiStateBuilder;
-        
-        private void Start()
-        {
-            InstallMenuUi();
-        }
+        private MenuFlowBuilder _menuFlowBuilder;
 
+        public override void Start()
+        {
+            Container.Resolve<SceneService>().InitializeScene(SceneManager.GetActiveScene().name);
+            InstallMenuFlow();
+        }
 
         private void OnDestroy()
         {
             Drop();
         }
 
-
         public override void InstallBindings()
         {
             Container.Bind<UiManager>().AsSingle().NonLazy();
         }
 
-
-        private void InstallMenuUi()
+        private void InstallMenuFlow()
         {
-            _menuUiStateBuilder = new MenuStateBuilder(Container.Resolve<UiManager>());
-            _menuUiStateBuilder.Build();
+            _menuFlowBuilder = new MenuFlowBuilder(Container.Resolve<UiManager>());
+            _menuFlowBuilder.Build();
         }
-
 
         private void Drop()
         {
-            _menuUiStateBuilder.Drop();
+            _menuFlowBuilder.Drop();
         }
     }
 }

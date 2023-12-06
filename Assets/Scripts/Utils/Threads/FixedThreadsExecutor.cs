@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-
 namespace Utils.Threads
 {
     public class FixedThreadsExecutor : IExecutor
@@ -16,7 +15,10 @@ namespace Utils.Threads
             {
                 int sum = 0;
 
-                foreach (var thread in _threads) sum += thread.TaskCount;
+                foreach (var thread in _threads)
+                {
+                    sum += thread.TaskCount;
+                }
 
                 return sum;
             }
@@ -29,29 +31,6 @@ namespace Utils.Threads
                 var tw = new SingleThreadExecutor(threadPriority);
                 _threads.Add(tw);
             }
-        }
-
-        private IExecutor GetThread()
-        {
-            int count = _threads[0].TaskCount;
-
-            if (_threads.Count == 1 || count == 0) return _threads[0];
-
-            int idx = 0;
-            for (int i = 1; i < _threads.Count; i++)
-            {
-                int test = _threads[i].TaskCount;
-
-                if (test == 0) return _threads[i];
-
-                if (count > test)
-                {
-                    count = test;
-                    idx = i;
-                }
-            }
-
-            return _threads[idx];
         }
 
         public void Shutdown()
@@ -81,6 +60,32 @@ namespace Utils.Threads
         public void Join()
         {
             foreach (var thread in _threads) thread.Join();
+        }
+
+        private IExecutor GetThread()
+        {
+            int count = _threads[0].TaskCount;
+
+            if (_threads.Count == 1 || count == 0) return _threads[0];
+
+            int idx = 0;
+            for (int i = 1; i < _threads.Count; i++)
+            {
+                int test = _threads[i].TaskCount;
+
+                if (test == 0)
+                {
+                    return _threads[i];
+                }
+
+                if (count > test)
+                {
+                    count = test;
+                    idx = i;
+                }
+            }
+
+            return _threads[idx];
         }
     }
 }

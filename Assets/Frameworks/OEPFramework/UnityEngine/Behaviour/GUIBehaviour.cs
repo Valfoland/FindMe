@@ -9,26 +9,13 @@ namespace Basement.OEPFramework.UnityEngine.Behaviour
     {
         public GameObject gameObject { get; private set; }
         public RectTransform rectTransform { get; private set; }
-        
-        protected string prefabPath;
+
         private RectTransform _parent;
         private readonly bool _external;
         private Dictionary<string, GameObject> _map;
         private string _startWith;
         private GameObject _template;
-
-        protected GUIBehaviour(GameObject go)
-        {
-            _external = true;
-            gameObject = go;
-            rectTransform = gameObject.GetComponent<RectTransform>();
-        }
-
-        protected GUIBehaviour(string prefabPath, RectTransform parent)
-        {
-            _parent = parent;
-            this.prefabPath = prefabPath;
-        }
+        
         protected GUIBehaviour(GameObject template, RectTransform parent)
         {
             _parent = parent;
@@ -59,7 +46,7 @@ namespace Basement.OEPFramework.UnityEngine.Behaviour
 
             if (!_external)
             {
-                gameObject = Object.Instantiate(_template ? _template : Resources.Load<GameObject>(prefabPath));
+                gameObject = Object.Instantiate(_template);
                 _template = null;
                 rectTransform = gameObject.GetComponent<RectTransform>();
 

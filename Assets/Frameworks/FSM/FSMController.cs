@@ -9,70 +9,78 @@ namespace Frameworks.FSM
 {
     public class FsmController : DroppableItemBase
     {
-        protected readonly List<StateBase> states = new();
-        protected StateBase currentState;
+        private readonly List<StateBase> _states = new();
+        private StateBase _currentState;
+
 
         public void Start()
         {
-            if (states.Count == 0)
+            if (_states.Count == 0)
             {
                 throw new Exception("Can't start empty state controller");
             }
 
-            currentState = states[0];
-            currentState.OnEnter();
+            _currentState = _states[0];
+            _currentState.OnEnter();
         }
 
 
         public override void Drop()
         {
             CloseCurrentState();
+
+            foreach (var state in _states)
+            {
+                state.Drop();
+            }
             
+            _states.Clear();
+
             base.Drop();
         }
 
 
         public void AddState(StateBase state)
         {
-            if (states.Any(cachedState => cachedState.Id == state.Id) || !states.Contains(state))
+            if (_states.Any(cachedState => cachedState.Id == state.Id))
             {
-                throw new Exception("It was try adding already cached state!");
+                throw new Exception("This was a try of adding an already cached state!");
             }
-            
-            states.Add(state);
+
+            _states.Add(state);
+
+            state.OnFinishState += () => StateBase_OnFinishState(state);
         }
 
-        
-        public void RemoveState(string stateTag)
+
+        public void RemoveState(string stateId)
         {
-            var stateToRemove = states.FirstOrDefault(state => state.Tag == stateTag);
+            var stateToRemove = _states.FirstOrDefault(state => state.Id == stateId);
 
             if (stateToRemove != null)
             {
-                states.Remove(stateToRemove);
+                _states.Remove(stateToRemove);
             }
         }
-        
+
+
         public void RemoveState(StateBase state)
         {
-            states.Remove(state);
+            _states.Remove(state);
         }
 
 
         public void CloseCurrentState()
         {
-            CloseState(currentState);
+            CloseState(_currentState);
         }
-        
-        
+
+
         public void CloseState(string stateTag)
         {
-            if (GetStateByTag(stateTag, out var state))
-            {
-                state.OnExit();
-            }
+            GetStateById(stateTag).OnExit();
         }
-        
+
 
         public void CloseState(StateBase state)
         {
@@ -81,19 +89,17 @@ namespace Frameworks.FSM
                 Debug.LogError($"State: {state} is null");
                 return;
             }
-            
+
             state.OnExit();
         }
-        
+
 
         public void SetState(string stateTag)
         {
-            if (GetStateByTag(stateTag, out var state))
-            {
-                SetState(state);
-            }
+            SetState(GetStateById(stateTag));
         }
-        
+
+
         public void SetState(StateBase state)
         {
             if (state == null)
@@ -101,47 +107,55 @@ namespace Frameworks.FSM
                 Debug.LogError($"State: {state} is null");
                 return;
             }
-            
-            if (currentState == state)
+
+            if (_currentState == state)
             {
-                Debug.LogError($"State: {state} is already started");
                 return;
             }
 
-            var defaultTransition = new DefaultStateTransition("", currentState, state);
-            defaultTransition.Transit(newState =>
-            {
-                currentState = newState;
-            });
+            var defaultTransition = new StateTransition(_currentState, state, null);
+            defaultTransition.Transit(newState => { _currentState = newState; });
         }
 
-        public bool GetStateByTag(string stateTag, out StateBase state)
+
+        public StateBase GetStateById(string stateId)
         {
-            var requiredState = states.FirstOrDefault(s => s.Tag == stateTag);
+            var requiredState = _states.FirstOrDefault(s => s.Id == stateId);
             if (requiredState != null)
             {
-                state = requiredState;
-                return true;
+                return requiredState;
             }
 
-            Debug.LogError($"Cannot find state by tag: {stateTag}");
-            state = null;
-            return false;
+            throw new Exception($"Cannot transit to state by tag: {stateId}");
         }
-        
-        public void Transit(string transitionTag)
-        {
-            var transition = currentState.stateTransitions.FirstOrDefault(t => t.TransitionTag == transitionTag);
 
-            if (transition == null)
+
+        public void Transit(string stateTag, Action<StateBase> onCompleted)
+        {
+            Transit(GetStateById(stateTag), onCompleted);
+        }
+
+
+        public void Transit(StateBase state, Action<StateBase> onCompleted)
+        {
+            foreach (var stateTransition in state.stateTransitions)
             {
-                throw new Exception($"Cannot transit to state by tag: {transitionTag}");
+                if (!stateTransition.Check())
+                {
+                    continue;
+                }
+
+                stateTransition.Transit(onCompleted);
+                return;
             }
-            
-            transition.Transit(newState =>
-            {
-                currentState = newState;
-            });
+
+            throw new Exception($"Cannot transit from state: {state.Id}");
+        }
+
+
+        private void StateBase_OnFinishState(StateBase state)
+        {
+            Transit(state, null);
         }
     }
 }

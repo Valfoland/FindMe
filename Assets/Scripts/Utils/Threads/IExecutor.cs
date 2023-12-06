@@ -1,7 +1,6 @@
 ﻿using Basement.OEPFramework.Futures;
 using System;
 
-
 namespace Utils.Threads
 {
     public interface IExecutor

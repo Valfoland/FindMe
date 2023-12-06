@@ -1,45 +1,46 @@
 using Basement.OEPFramework.UnityEngine.Behaviour;
 using Basement.OEPFramework.UnityEngine.Loop;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Ui.GuiEffects;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 
 namespace Ui
 {
     public class WindowGuiBehaviour : GUIBehaviour
     {
-        private const string SoundClose = "";
+        public event Action<WindowGuiBehaviourState> OnStateChanged;
 
-        protected readonly IList<GuiEffect> guiEffects = new List<GuiEffect>();
+
+        public event Action OnWindowShow;
+
+
+        public event Action OnWindowShown;
+
+
+        public event Action OnWindowHide;
+
+
+        public event Action OnWindowHidden;
+
+
+        protected event Action<bool> OnWindowActivated;
+
+
         private bool _dropItem = true;
 
-        public WindowType WindowType { get; private set; }
 
-        public event Action<WindowGuiBehaviourState> StateChanged;
+        public WindowType WindowType { get; }
 
-        protected event Action<bool> WindowActivated;
 
         public WindowGuiBehaviourState CurrentState { get; private set; } = WindowGuiBehaviourState.None;
 
-        public virtual bool IsTapable => CurrentState == WindowGuiBehaviourState.Visible;
 
+        public bool IsTapable => CurrentState == WindowGuiBehaviourState.Visible;
 
-        protected WindowGuiBehaviour(GameObject go, WindowType windowType) : base(go)
-        {
-            WindowType = windowType;
-        }
-
-
-        protected WindowGuiBehaviour(string prefabPath, RectTransform parent, WindowType windowType) : base(prefabPath, parent)
-        {
-            WindowType = windowType;
-        }
-
-
-        protected WindowGuiBehaviour(GameObject template, RectTransform parent, WindowType windowType) : base(template, parent)
+        
+        protected WindowGuiBehaviour(GameObject template, RectTransform parent, WindowType windowType) : base(template,
+            parent)
         {
             WindowType = windowType;
         }
@@ -66,32 +67,27 @@ namespace Ui
                 return;
             }
 
-            foreach (var effectBehaviour in guiEffects)
-            {
-                effectBehaviour.Drop();
-            }
-
-            guiEffects.Clear();
+            OnWindowShow = null;
+            OnWindowShown = null;
+            OnWindowHide = null;
+            OnWindowHidden = null;
 
             SetState(WindowGuiBehaviourState.Destroyed);
             base.Drop();
         }
 
 
-        public virtual void Show()
+        public void Show()
         {
+            OnShow();
             SetState(WindowGuiBehaviourState.Constructed);
             SetActive(true);
-
-            foreach (var effectBehaviour in guiEffects)
-            {
-                effectBehaviour.Show();
-            }
         }
 
 
-        public virtual void Hide(bool dropItem = true)
+        public void Hide(bool dropItem = true)
         {
+            OnHide();
             _dropItem = dropItem;
 
             if (CurrentState == WindowGuiBehaviourState.Constructed || dropped)
@@ -100,40 +96,6 @@ namespace Ui
             }
 
             SetState(WindowGuiBehaviourState.Closing);
-
-            if (guiEffects.Count > 0)
-            {
-                PlaySound(SoundClose);
-            }
-
-            foreach (var effectBehaviour in guiEffects)
-            {
-                effectBehaviour.Hide();
-            }
-        }
-
-
-        public void AddEffectBehaviour(GuiEffect effectBehaviour)
-        {
-            guiEffects.Add(effectBehaviour);
-        }
-
-
-        public bool RemoveEffectBehaviour(GuiEffect effectBehaviour)
-        {
-            return guiEffects.Remove(effectBehaviour);
-        }
-
-
-        public bool HasEffectBehaviour<T>() where T : GuiEffect
-        {
-            return guiEffects.OfType<T>().Any();
-        }
-
-
-        public T GetBehaviour<T>() where T : GuiEffect
-        {
-            return (T) guiEffects.FirstOrDefault(behaviour => behaviour is T);
         }
 
 
@@ -152,14 +114,51 @@ namespace Ui
         {
             if (gameObject != null && gameObject.activeSelf != active)
             {
-                WindowActivated?.Invoke(active);
+                OnWindowActivated?.Invoke(active);
             }
 
             base.SetActive(active);
         }
 
 
+        protected virtual void OnShow()
+        {
+            OnWindowShow?.Invoke();
+        }
+
+
+        protected virtual void OnShown()
+        {
+            OnWindowShown?.Invoke();
+        }
+
+
+        protected virtual void OnHide()
+        {
+            OnWindowHide?.Invoke();
+        }
+
+
+        protected virtual void OnHidden()
+        {
+            OnWindowHidden?.Invoke();
+        }
+
+
         protected virtual void OnUpdate() { }
+
+
+        protected override void OnUninitialize()
+        {
+            if (_dropItem)
+            {
+                Object.Destroy(gameObject);
+            }
+            else
+            {
+                SetActive(false);
+            }
+        }
 
 
         protected void SetState(WindowGuiBehaviourState newState)
@@ -167,67 +166,23 @@ namespace Ui
             if (CurrentState != newState)
             {
                 CurrentState = newState;
-                StateChanged?.Invoke(newState);
+                OnStateChanged?.Invoke(newState);
             }
-        }
-
-
-        protected void PlaySound(string soundId)
-        {
-            if (!string.IsNullOrEmpty(soundId)) { }
         }
 
 
         private void WindowIsClosing()
         {
-            var check = true;
-
-            foreach (var effectBehaviour in guiEffects)
-            {
-                if (effectBehaviour.State == GuiEffectState.Hidden)
-                {
-                    continue;
-                }
-
-                check = false;
-                break;
-            }
-
-            if (check)
-            {
-                SetState(WindowGuiBehaviourState.Hidden);
-
-                if (_dropItem)
-                {
-                    Drop();
-                }
-                else
-                {
-                    SetActive(false);
-                }
-            }
+            SetState(WindowGuiBehaviourState.Hidden);
+            OnHidden();
+            Drop();
         }
 
 
         private void WindowIsOpening()
         {
-            var check = true;
-
-            foreach (var effectBehaviour in guiEffects)
-            {
-                if (effectBehaviour.State == GuiEffectState.Showed)
-                {
-                    continue;
-                }
-
-                check = false;
-                break;
-            }
-
-            if (check)
-            {
-                SetState(WindowGuiBehaviourState.Visible);
-            }
+            SetState(WindowGuiBehaviourState.Visible);
+            OnShown();
         }
 
 

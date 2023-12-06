@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace Utils
 {
     [Serializable]
@@ -11,9 +10,7 @@ namespace Utils
         private Dictionary<TKey, TValue> dictionary = new();
         [SerializeField] private List<DictionaryItem> list = new();
 
-
         public Dictionary<TKey, TValue> Dictionary => dictionary;
-
 
         public TValue this[TKey key]
         {
@@ -24,13 +21,11 @@ namespace Utils
             }
         }
 
-
         public void Add(TKey key, TValue value)
         {
             list.Add(new DictionaryItem(key, value));
             dictionary.Add(key, value);
         }
-
 
         public void Clear()
         {
@@ -38,9 +33,7 @@ namespace Utils
             dictionary.Clear();
         }
 
-
         public void OnBeforeSerialize() { }
-
 
         public void OnAfterDeserialize()
         {
@@ -58,13 +51,11 @@ namespace Utils
             }
         }
 
-
         [Serializable]
         private class DictionaryItem
         {
             public TKey key;
             public TValue value;
-
 
             public DictionaryItem(TKey key, TValue value)
             {
