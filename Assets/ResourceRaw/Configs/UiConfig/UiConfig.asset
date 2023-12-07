@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452276062661957438d33d05d85d4a8a, type: 3}
   m_Name: UiConfig
   m_EditorClassIdentifier: 
-  uiAssets:
+  _uiAssets:
     list:
     - key: 1
       value: {fileID: 5439961303463310664, guid: 2ee817760a0ed554d8953886d85df8fb,

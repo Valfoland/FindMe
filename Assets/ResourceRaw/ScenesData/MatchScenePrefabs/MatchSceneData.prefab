@@ -44,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b5a44b277238fe4da9c65eb5bff14aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneKey: Match
-  _mainCameraPrefab: {fileID: 0}
   uiCanvasPrefab: {fileID: 2727116203754289142, guid: 22a2f51f225dfba45972f8c7978291d4,
     type: 3}
+  _sceneKey: Match
+  _mainCameraPrefab: {fileID: 0}
   _uiCameraPrefab: {fileID: 8711611527779879761, guid: c12e11bcaa034fc41baee2fb18830819,
     type: 3}
   _environmentRootPrefab: {fileID: 1771236781785023208, guid: b3ed736a112a9d14b9dd7e657c53380b,

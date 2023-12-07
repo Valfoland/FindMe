@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d552dfe1f5bbb644b080a6aec403742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneKey: Menu
-  _mainCameraPrefab: {fileID: 8711611527779879761, guid: d64a9224fe244d843bcd93f5bf7817a8,
-    type: 3}
   uiCanvasPrefab: {fileID: 2727116203754289142, guid: 3b96183154727964c8f0e4a0bcd6cd7f,
+    type: 3}
+  _sceneKey: Menu
+  _mainCameraPrefab: {fileID: 8711611527779879761, guid: d64a9224fe244d843bcd93f5bf7817a8,
     type: 3}
